@@ -1,10 +1,5 @@
 package com.hodehtml.demo.utils;
 
-import com.weihui.gateway.httpclient.HttpProtocolHandler;
-import com.weihui.gateway.httpclient.HttpRequest;
-import com.weihui.gateway.httpclient.HttpResponse;
-import com.weihui.gateway.httpclient.HttpResultType;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -135,48 +130,4 @@ public class CallServiceUtil {
 		return result;
 	}
 
-	/**
-	 * post提交请求
-	 * 
-	 * @param singled
-	 * @param url
-	 * @param charset
-	 * @return
-	 * @throws Exception
-	 */
-	public static String post(Map<String, String> singled, String url,
-			String charset) throws Exception {
-		HttpRequest request = new HttpRequest(HttpResultType.BYTES);
-		request.setCharset(charset);
-		request.setMethod(HttpRequest.METHOD_POST);
-		request.setParameters(generatNameValuePair(singled, charset));
-		request.setUrl(url);
-
-		HttpProtocolHandler httpProtocolHandler = HttpProtocolHandler
-				.getInstance();
-		HttpResponse response = httpProtocolHandler
-				.execute(request, null, null);
-		if (response == null) {
-			return null;
-		}
-		return response.getStringResult();
-	}
-
-	/**
-	 * MAP类型数组转换成NameValuePair类型
-	 *
-	 * @param properties
-	 *            MAP类型数组
-	 * @return NameValuePair类型数组
-	 */
-	private static NameValuePair[] generatNameValuePair(
-			Map<String, String> properties, String charset) throws Exception {
-		NameValuePair[] nameValuePair = new NameValuePair[properties.size()];
-		int i = 0;
-		for (Map.Entry<String, String> entry : properties.entrySet()) {
-			nameValuePair[i++] = new NameValuePair(entry.getKey(),
-					entry.getValue());
-		}
-		return nameValuePair;
-	}
 }

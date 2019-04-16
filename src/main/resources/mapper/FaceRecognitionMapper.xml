@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hodehtml.demo.dao.FaceRecognitionMapper">
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.FaceRecognition">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="id_name" jdbcType="VARCHAR" property="idName" />
+    <result column="flag_sex" jdbcType="TINYINT" property="flagSex" />
+    <result column="id_no" jdbcType="CHAR" property="idNo" />
+    <result column="date_birthday" jdbcType="CHAR" property="dateBirthday" />
+    <result column="addr_card" jdbcType="VARCHAR" property="addrCard" />
+    <result column="branch_issued" jdbcType="VARCHAR" property="branchIssued" />
+    <result column="state_id" jdbcType="VARCHAR" property="stateId" />
+    <result column="start_card" jdbcType="CHAR" property="startCard" />
+    <result column="be_idcard" jdbcType="VARCHAR" property="beIdcard" />
+    <result column="result_auth" jdbcType="TINYINT" property="resultAuth" />
+    <result column="ret_code" jdbcType="VARCHAR" property="retCode" />
+    <result column="ret_msg" jdbcType="VARCHAR" property="retMsg" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="url_photoget" jdbcType="VARCHAR" property="urlPhotoget" />
+    <result column="url_frontcard" jdbcType="VARCHAR" property="urlFrontcard" />
+    <result column="url_backcard" jdbcType="VARCHAR" property="urlBackcard" />
+    <result column="kjt_account" jdbcType="VARCHAR" property="kjtAccount" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, id_name, flag_sex, id_no, date_birthday, addr_card, branch_issued, state_id, 
+    start_card, be_idcard, result_auth, ret_code, ret_msg, create_time, url_photoget, 
+    url_frontcard, url_backcard, kjt_account, uuid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from grab_face_recognition
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from grab_face_recognition
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.FaceRecognition">
+    insert into grab_face_recognition (id, user_id, id_name, 
+      flag_sex, id_no, date_birthday, 
+      addr_card, branch_issued, state_id, 
+      start_card, be_idcard, result_auth, 
+      ret_code, ret_msg, create_time, 
+      url_photoget, url_frontcard, url_backcard, 
+      kjt_account, uuid)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{idName,jdbcType=VARCHAR}, 
+      #{flagSex,jdbcType=TINYINT}, #{idNo,jdbcType=CHAR}, #{dateBirthday,jdbcType=CHAR}, 
+      #{addrCard,jdbcType=VARCHAR}, #{branchIssued,jdbcType=VARCHAR}, #{stateId,jdbcType=VARCHAR}, 
+      #{startCard,jdbcType=CHAR}, #{beIdcard,jdbcType=VARCHAR}, #{resultAuth,jdbcType=TINYINT}, 
+      #{retCode,jdbcType=VARCHAR}, #{retMsg,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{urlPhotoget,jdbcType=VARCHAR}, #{urlFrontcard,jdbcType=VARCHAR}, #{urlBackcard,jdbcType=VARCHAR}, 
+      #{kjtAccount,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.FaceRecognition">
+    insert into grab_face_recognition
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="idName != null">
+        id_name,
+      </if>
+      <if test="flagSex != null">
+        flag_sex,
+      </if>
+      <if test="idNo != null">
+        id_no,
+      </if>
+      <if test="dateBirthday != null">
+        date_birthday,
+      </if>
+      <if test="addrCard != null">
+        addr_card,
+      </if>
+      <if test="branchIssued != null">
+        branch_issued,
+      </if>
+      <if test="stateId != null">
+        state_id,
+      </if>
+      <if test="startCard != null">
+        start_card,
+      </if>
+      <if test="beIdcard != null">
+        be_idcard,
+      </if>
+      <if test="resultAuth != null">
+        result_auth,
+      </if>
+      <if test="retCode != null">
+        ret_code,
+      </if>
+      <if test="retMsg != null">
+        ret_msg,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="urlPhotoget != null">
+        url_photoget,
+      </if>
+      <if test="urlFrontcard != null">
+        url_frontcard,
+      </if>
+      <if test="urlBackcard != null">
+        url_backcard,
+      </if>
+      <if test="kjtAccount != null">
+        kjt_account,
+      </if>
+      <if test="uuid != null">
+        uuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="idName != null">
+        #{idName,jdbcType=VARCHAR},
+      </if>
+      <if test="flagSex != null">
+        #{flagSex,jdbcType=TINYINT},
+      </if>
+      <if test="idNo != null">
+        #{idNo,jdbcType=CHAR},
+      </if>
+      <if test="dateBirthday != null">
+        #{dateBirthday,jdbcType=CHAR},
+      </if>
+      <if test="addrCard != null">
+        #{addrCard,jdbcType=VARCHAR},
+      </if>
+      <if test="branchIssued != null">
+        #{branchIssued,jdbcType=VARCHAR},
+      </if>
+      <if test="stateId != null">
+        #{stateId,jdbcType=VARCHAR},
+      </if>
+      <if test="startCard != null">
+        #{startCard,jdbcType=CHAR},
+      </if>
+      <if test="beIdcard != null">
+        #{beIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="resultAuth != null">
+        #{resultAuth,jdbcType=TINYINT},
+      </if>
+      <if test="retCode != null">
+        #{retCode,jdbcType=VARCHAR},
+      </if>
+      <if test="retMsg != null">
+        #{retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="urlPhotoget != null">
+        #{urlPhotoget,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFrontcard != null">
+        #{urlFrontcard,jdbcType=VARCHAR},
+      </if>
+      <if test="urlBackcard != null">
+        #{urlBackcard,jdbcType=VARCHAR},
+      </if>
+      <if test="kjtAccount != null">
+        #{kjtAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.FaceRecognition">
+    update grab_face_recognition
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="idName != null">
+        id_name = #{idName,jdbcType=VARCHAR},
+      </if>
+      <if test="flagSex != null">
+        flag_sex = #{flagSex,jdbcType=TINYINT},
+      </if>
+      <if test="idNo != null">
+        id_no = #{idNo,jdbcType=CHAR},
+      </if>
+      <if test="dateBirthday != null">
+        date_birthday = #{dateBirthday,jdbcType=CHAR},
+      </if>
+      <if test="addrCard != null">
+        addr_card = #{addrCard,jdbcType=VARCHAR},
+      </if>
+      <if test="branchIssued != null">
+        branch_issued = #{branchIssued,jdbcType=VARCHAR},
+      </if>
+      <if test="stateId != null">
+        state_id = #{stateId,jdbcType=VARCHAR},
+      </if>
+      <if test="startCard != null">
+        start_card = #{startCard,jdbcType=CHAR},
+      </if>
+      <if test="beIdcard != null">
+        be_idcard = #{beIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="resultAuth != null">
+        result_auth = #{resultAuth,jdbcType=TINYINT},
+      </if>
+      <if test="retCode != null">
+        ret_code = #{retCode,jdbcType=VARCHAR},
+      </if>
+      <if test="retMsg != null">
+        ret_msg = #{retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="urlPhotoget != null">
+        url_photoget = #{urlPhotoget,jdbcType=VARCHAR},
+      </if>
+      <if test="urlFrontcard != null">
+        url_frontcard = #{urlFrontcard,jdbcType=VARCHAR},
+      </if>
+      <if test="urlBackcard != null">
+        url_backcard = #{urlBackcard,jdbcType=VARCHAR},
+      </if>
+      <if test="kjtAccount != null">
+        kjt_account = #{kjtAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.FaceRecognition">
+    update grab_face_recognition
+    set user_id = #{userId,jdbcType=VARCHAR},
+      id_name = #{idName,jdbcType=VARCHAR},
+      flag_sex = #{flagSex,jdbcType=TINYINT},
+      id_no = #{idNo,jdbcType=CHAR},
+      date_birthday = #{dateBirthday,jdbcType=CHAR},
+      addr_card = #{addrCard,jdbcType=VARCHAR},
+      branch_issued = #{branchIssued,jdbcType=VARCHAR},
+      state_id = #{stateId,jdbcType=VARCHAR},
+      start_card = #{startCard,jdbcType=CHAR},
+      be_idcard = #{beIdcard,jdbcType=VARCHAR},
+      result_auth = #{resultAuth,jdbcType=TINYINT},
+      ret_code = #{retCode,jdbcType=VARCHAR},
+      ret_msg = #{retMsg,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      url_photoget = #{urlPhotoget,jdbcType=VARCHAR},
+      url_frontcard = #{urlFrontcard,jdbcType=VARCHAR},
+      url_backcard = #{urlBackcard,jdbcType=VARCHAR},
+      kjt_account = #{kjtAccount,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

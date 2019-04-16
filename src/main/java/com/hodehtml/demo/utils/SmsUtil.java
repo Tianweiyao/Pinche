@@ -19,7 +19,7 @@ public class SmsUtil {
 	//public static String userid = PropertiesConfig.getProperties("sms","wodong_userid");
 	public static String account = "13958873583";
 	public static String password = "13958873583";
-	public static String prefix = "【"+"现代吧"+"】";
+	public static String prefix = "【"+"小贷"+"】";
 
 	
 	public static void main(String[] args) throws JDOMException, IOException {
@@ -51,8 +51,8 @@ public class SmsUtil {
 			content = prefix+content;
 			//url = url.replace("sendvms", "sms");
 		}
-		log.info("短信发送mobile:"+mobile+",  content:"+content+",  title:"+title+" url:"+url+" 执行开始...");
-		String result = sendSms(url, null, account, password, mobile, content, null,
+		log.info("短信发送mobile:"+mobile+",  content:"+prefix+content+",  title:"+title+" url:"+url+" 执行开始...");
+		String result = sendSms(url, null, account, password, mobile, prefix+content, null,
 				null, null, null, null, null, null, "POST", "UTF-8", "UTF-8",title);
 		log.info("短信发送mobile:"+mobile+",  title:"+title+"执行结果:"+result);
 		if(ValidatorUtils.isNull(result)){

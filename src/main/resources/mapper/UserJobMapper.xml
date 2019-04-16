@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.UserJobMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.UserJob" >
+    <id column="job_id" property="jobId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="month_income" property="monthIncome" jdbcType="TINYINT" />
+    <result column="company_area_no" property="companyAreaNo" jdbcType="CHAR" />
+    <result column="company_address" property="companyAddress" jdbcType="VARCHAR" />
+    <result column="induction_times" property="inductionTimes" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="INTEGER" />
+    <result column="company_post" property="companyPost" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    job_id, user_id, company_name, month_income, company_area_no, company_address, induction_times, 
+    create_time, last_modify_time, company_post
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_job
+    where job_id = #{jobId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_job
+    where job_id = #{jobId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.UserJob" >
+    insert into user_job (job_id, user_id, company_name, 
+      month_income, company_area_no, company_address, 
+      induction_times, create_time, last_modify_time, 
+      company_post)
+    values (#{jobId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{monthIncome,jdbcType=TINYINT}, #{companyAreaNo,jdbcType=CHAR}, #{companyAddress,jdbcType=VARCHAR}, 
+      #{inductionTimes,jdbcType=TINYINT}, #{createTime,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=INTEGER},
+      #{companyPost,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserJob" >
+    insert into user_job
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jobId != null" >
+        job_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="monthIncome != null" >
+        month_income,
+      </if>
+      <if test="companyAreaNo != null" >
+        company_area_no,
+      </if>
+      <if test="companyAddress != null" >
+        company_address,
+      </if>
+      <if test="inductionTimes != null" >
+        induction_times,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+      <if test="companyPost != null" >
+        company_post,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jobId != null" >
+        #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="monthIncome != null" >
+        #{monthIncome,jdbcType=TINYINT},
+      </if>
+      <if test="companyAreaNo != null" >
+        #{companyAreaNo,jdbcType=CHAR},
+      </if>
+      <if test="companyAddress != null" >
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="inductionTimes != null" >
+        #{inductionTimes,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="companyPost != null" >
+        #{companyPost,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.UserJob" >
+    update user_job
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="monthIncome != null" >
+        month_income = #{monthIncome,jdbcType=TINYINT},
+      </if>
+      <if test="companyAreaNo != null" >
+        company_area_no = #{companyAreaNo,jdbcType=CHAR},
+      </if>
+      <if test="companyAddress != null" >
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="inductionTimes != null" >
+        induction_times = #{inductionTimes,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="companyPost != null" >
+        company_post = #{companyPost,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where job_id = #{jobId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.UserJob" >
+    update user_job
+    set user_id = #{userId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      month_income = #{monthIncome,jdbcType=TINYINT},
+      company_area_no = #{companyAreaNo,jdbcType=CHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
+      induction_times = #{inductionTimes,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=INTEGER},
+      company_post = #{companyPost,jdbcType=VARCHAR}
+    where job_id = #{jobId,jdbcType=INTEGER}
+  </update>
+</mapper>

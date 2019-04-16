@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.UserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.UserInfo" >
+    <id column="info_id" property="infoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="TINYINT" />
+    <result column="card_no" property="cardNo" jdbcType="CHAR" />
+    <result column="user_birth_year" property="userBirthYear" jdbcType="CHAR" />
+    <result column="user_birthday" property="userBirthday" jdbcType="CHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="living_area_no" property="livingAreaNo" jdbcType="CHAR" />
+    <result column="living_address" property="livingAddress" jdbcType="VARCHAR" />
+    <result column="marital_status" property="maritalStatus" jdbcType="TINYINT" />
+    <result column="living_times" property="livingTimes" jdbcType="SMALLINT" />
+    <result column="user_email" property="userEmail" jdbcType="VARCHAR" />
+    <result column="auth_status" property="authStatus" jdbcType="TINYINT" />
+    <result column="auth_step" property="authStep" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="INTEGER" />
+    <result column="check_no" property="checkNo" jdbcType="CHAR" />
+    <result column="machine_remark" property="machineRemark" jdbcType="VARCHAR" />
+    <result column="loan_times" property="loanTimes" jdbcType="INTEGER" />
+    <result column="check_status" property="checkStatus" jdbcType="INTEGER" />
+    <result column="distribution_status" property="distributionStatus" jdbcType="TINYINT" />
+    <result column="connect_status" property="connectStatus" jdbcType="TINYINT" />
+    <result column="income" property="income" jdbcType="SMALLINT" />
+    <result column="periods" property="periods" jdbcType="SMALLINT" />
+    <result column="real_periods" property="realPeriods" jdbcType="SMALLINT" />
+    <result column="loan_days" property="loanDays" jdbcType="INTEGER" />
+    <result column="user_jinji" property="userJinji" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    info_id, user_id, user_name, user_sex, card_no, user_birth_year, user_birthday, province, 
+    city, area, living_area_no, living_address, marital_status, living_times, user_email, 
+    auth_status, auth_step, create_time, last_update_time, check_no, machine_remark, 
+    loan_times, check_status, distribution_status, connect_status, income, periods, real_periods, 
+    loan_days, user_jinji
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where info_id = #{infoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_info
+    where info_id = #{infoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.UserInfo" >
+    insert into user_info (info_id, user_id, user_name, 
+      user_sex, card_no, user_birth_year, 
+      user_birthday, province, city, 
+      area, living_area_no, living_address, 
+      marital_status, living_times, user_email, 
+      auth_status, auth_step, create_time, 
+      last_update_time, check_no, machine_remark, 
+      loan_times, check_status, distribution_status, 
+      connect_status, income, periods, 
+      real_periods, loan_days, user_jinji
+      )
+    values (#{infoId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userSex,jdbcType=TINYINT}, #{cardNo,jdbcType=CHAR}, #{userBirthYear,jdbcType=CHAR}, 
+      #{userBirthday,jdbcType=CHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{livingAreaNo,jdbcType=CHAR}, #{livingAddress,jdbcType=VARCHAR}, 
+      #{maritalStatus,jdbcType=TINYINT}, #{livingTimes,jdbcType=SMALLINT}, #{userEmail,jdbcType=VARCHAR}, 
+      #{authStatus,jdbcType=TINYINT}, #{authStep,jdbcType=TINYINT}, #{createTime,jdbcType=VARCHAR},
+      #{lastUpdateTime,jdbcType=INTEGER}, #{checkNo,jdbcType=CHAR}, #{machineRemark,jdbcType=VARCHAR}, 
+      #{loanTimes,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, #{distributionStatus,jdbcType=TINYINT}, 
+      #{connectStatus,jdbcType=TINYINT}, #{income,jdbcType=SMALLINT}, #{periods,jdbcType=SMALLINT}, 
+      #{realPeriods,jdbcType=SMALLINT}, #{loanDays,jdbcType=INTEGER}, #{userJinji,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserInfo" >
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="infoId != null" >
+        info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userSex != null" >
+        user_sex,
+      </if>
+      <if test="cardNo != null" >
+        card_no,
+      </if>
+      <if test="userBirthYear != null" >
+        user_birth_year,
+      </if>
+      <if test="userBirthday != null" >
+        user_birthday,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="livingAreaNo != null" >
+        living_area_no,
+      </if>
+      <if test="livingAddress != null" >
+        living_address,
+      </if>
+      <if test="maritalStatus != null" >
+        marital_status,
+      </if>
+      <if test="livingTimes != null" >
+        living_times,
+      </if>
+      <if test="userEmail != null" >
+        user_email,
+      </if>
+      <if test="authStatus != null" >
+        auth_status,
+      </if>
+      <if test="authStep != null" >
+        auth_step,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+      <if test="checkNo != null" >
+        check_no,
+      </if>
+      <if test="machineRemark != null" >
+        machine_remark,
+      </if>
+      <if test="loanTimes != null" >
+        loan_times,
+      </if>
+      <if test="checkStatus != null" >
+        check_status,
+      </if>
+      <if test="distributionStatus != null" >
+        distribution_status,
+      </if>
+      <if test="connectStatus != null" >
+        connect_status,
+      </if>
+      <if test="income != null" >
+        income,
+      </if>
+      <if test="periods != null" >
+        periods,
+      </if>
+      <if test="realPeriods != null" >
+        real_periods,
+      </if>
+      <if test="loanDays != null" >
+        loan_days,
+      </if>
+      <if test="userJinji != null" >
+        user_jinji,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="infoId != null" >
+        #{infoId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        #{userSex,jdbcType=TINYINT},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=CHAR},
+      </if>
+      <if test="userBirthYear != null" >
+        #{userBirthYear,jdbcType=CHAR},
+      </if>
+      <if test="userBirthday != null" >
+        #{userBirthday,jdbcType=CHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="livingAreaNo != null" >
+        #{livingAreaNo,jdbcType=CHAR},
+      </if>
+      <if test="livingAddress != null" >
+        #{livingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null" >
+        #{maritalStatus,jdbcType=TINYINT},
+      </if>
+      <if test="livingTimes != null" >
+        #{livingTimes,jdbcType=SMALLINT},
+      </if>
+      <if test="userEmail != null" >
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="authStatus != null" >
+        #{authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="authStep != null" >
+        #{authStep,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=INTEGER},
+      </if>
+      <if test="checkNo != null" >
+        #{checkNo,jdbcType=CHAR},
+      </if>
+      <if test="machineRemark != null" >
+        #{machineRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTimes != null" >
+        #{loanTimes,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null" >
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="distributionStatus != null" >
+        #{distributionStatus,jdbcType=TINYINT},
+      </if>
+      <if test="connectStatus != null" >
+        #{connectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="income != null" >
+        #{income,jdbcType=SMALLINT},
+      </if>
+      <if test="periods != null" >
+        #{periods,jdbcType=SMALLINT},
+      </if>
+      <if test="realPeriods != null" >
+        #{realPeriods,jdbcType=SMALLINT},
+      </if>
+      <if test="loanDays != null" >
+        #{loanDays,jdbcType=INTEGER},
+      </if>
+      <if test="userJinji != null" >
+        #{userJinji,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.UserInfo" >
+    update user_info
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        user_sex = #{userSex,jdbcType=TINYINT},
+      </if>
+      <if test="cardNo != null" >
+        card_no = #{cardNo,jdbcType=CHAR},
+      </if>
+      <if test="userBirthYear != null" >
+        user_birth_year = #{userBirthYear,jdbcType=CHAR},
+      </if>
+      <if test="userBirthday != null" >
+        user_birthday = #{userBirthday,jdbcType=CHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="livingAreaNo != null" >
+        living_area_no = #{livingAreaNo,jdbcType=CHAR},
+      </if>
+      <if test="livingAddress != null" >
+        living_address = #{livingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null" >
+        marital_status = #{maritalStatus,jdbcType=TINYINT},
+      </if>
+      <if test="livingTimes != null" >
+        living_times = #{livingTimes,jdbcType=SMALLINT},
+      </if>
+      <if test="userEmail != null" >
+        user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="authStatus != null" >
+        auth_status = #{authStatus,jdbcType=TINYINT},
+      </if>
+      <if test="authStep != null" >
+        auth_step = #{authStep,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=INTEGER},
+      </if>
+      <if test="checkNo != null" >
+        check_no = #{checkNo,jdbcType=CHAR},
+      </if>
+      <if test="machineRemark != null" >
+        machine_remark = #{machineRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTimes != null" >
+        loan_times = #{loanTimes,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null" >
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="distributionStatus != null" >
+        distribution_status = #{distributionStatus,jdbcType=TINYINT},
+      </if>
+      <if test="connectStatus != null" >
+        connect_status = #{connectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="income != null" >
+        income = #{income,jdbcType=SMALLINT},
+      </if>
+      <if test="periods != null" >
+        periods = #{periods,jdbcType=SMALLINT},
+      </if>
+      <if test="realPeriods != null" >
+        real_periods = #{realPeriods,jdbcType=SMALLINT},
+      </if>
+      <if test="loanDays != null" >
+        loan_days = #{loanDays,jdbcType=INTEGER},
+      </if>
+      <if test="userJinji != null" >
+        user_jinji = #{userJinji,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where info_id = #{infoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.UserInfo" >
+    update user_info
+    set user_id = #{userId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=TINYINT},
+      card_no = #{cardNo,jdbcType=CHAR},
+      user_birth_year = #{userBirthYear,jdbcType=CHAR},
+      user_birthday = #{userBirthday,jdbcType=CHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      living_area_no = #{livingAreaNo,jdbcType=CHAR},
+      living_address = #{livingAddress,jdbcType=VARCHAR},
+      marital_status = #{maritalStatus,jdbcType=TINYINT},
+      living_times = #{livingTimes,jdbcType=SMALLINT},
+      user_email = #{userEmail,jdbcType=VARCHAR},
+      auth_status = #{authStatus,jdbcType=TINYINT},
+      auth_step = #{authStep,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      last_update_time = #{lastUpdateTime,jdbcType=INTEGER},
+      check_no = #{checkNo,jdbcType=CHAR},
+      machine_remark = #{machineRemark,jdbcType=VARCHAR},
+      loan_times = #{loanTimes,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      distribution_status = #{distributionStatus,jdbcType=TINYINT},
+      connect_status = #{connectStatus,jdbcType=TINYINT},
+      income = #{income,jdbcType=SMALLINT},
+      periods = #{periods,jdbcType=SMALLINT},
+      real_periods = #{realPeriods,jdbcType=SMALLINT},
+      loan_days = #{loanDays,jdbcType=INTEGER},
+      user_jinji = #{userJinji,jdbcType=VARCHAR}
+    where info_id = #{infoId,jdbcType=INTEGER}
+  </update>
+</mapper>

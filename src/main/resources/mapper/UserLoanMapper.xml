@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.UserLoanMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.UserLoan" >
+    <id column="loan_no" property="loanNo" jdbcType="CHAR" />
+    <result column="order_id" property="orderId" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="INTEGER" />
+    <result column="loan_money" property="loanMoney" jdbcType="DECIMAL" />
+    <result column="loan_days" property="loanDays" jdbcType="SMALLINT" />
+    <result column="loan_rate" property="loanRate" jdbcType="DECIMAL" />
+    <result column="loan_time" property="loanTime" jdbcType="INTEGER" />
+    <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+    <result column="pay_time" property="payTime" jdbcType="INTEGER" />
+    <result column="overdue_days" property="overdueDays" jdbcType="SMALLINT" />
+    <result column="total_interest" property="totalInterest" jdbcType="DECIMAL" />
+    <result column="total_uninterest" property="totalUninterest" jdbcType="DECIMAL" />
+    <result column="total_latefee" property="totalLatefee" jdbcType="DECIMAL" />
+    <result column="repayment_capital" property="repaymentCapital" jdbcType="DECIMAL" />
+    <result column="repayment_interest" property="repaymentInterest" jdbcType="DECIMAL" />
+    <result column="repayment_latefee" property="repaymentLatefee" jdbcType="DECIMAL" />
+    <result column="repayment_success_time" property="repaymentSuccessTime" jdbcType="INTEGER" />
+    <result column="repay_status" property="repayStatus" jdbcType="TINYINT" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="TINYINT" />
+    <result column="partner_use_flg" property="partnerUseFlg" jdbcType="TINYINT" />
+    <result column="agency_id" property="agencyId" jdbcType="INTEGER" />
+    <result column="sign_status" property="signStatus" jdbcType="TINYINT" />
+    <result column="stage_times" property="stageTimes" jdbcType="TINYINT" />
+    <result column="repay_issue" property="repayIssue" jdbcType="INTEGER" />
+    <result column="apply_status" property="applyStatus" jdbcType="TINYINT" />
+    <result column="sign_remark" property="signRemark" jdbcType="VARCHAR" />
+    <result column="sign_url" property="signUrl" jdbcType="VARCHAR" />
+    <result column="pay_evdience" property="payEvdience" jdbcType="VARCHAR" />
+    <result column="repay_grant_status" property="repayGrantStatus" jdbcType="TINYINT" />
+    <result column="sign_service" property="signService" jdbcType="VARCHAR" />
+    <result column="sign_evid" property="signEvid" jdbcType="VARCHAR" />
+    <result column="sign_key" property="signKey" jdbcType="VARCHAR" />
+    <result column="sign_time" property="signTime" jdbcType="INTEGER" />
+    <result column="old_loan_time" property="oldLoanTime" jdbcType="INTEGER" />
+    <result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_no, order_id, user_id, bank_id, loan_money, loan_days, loan_rate, loan_time, 
+    pay_status, pay_time, overdue_days, total_interest, total_uninterest, total_latefee, 
+    repayment_capital, repayment_interest, repayment_latefee, repayment_success_time, 
+    repay_status, bill_no, device_type, partner_use_flg, agency_id, sign_status, stage_times, 
+    repay_issue, apply_status, sign_remark, sign_url, pay_evdience, repay_grant_status, 
+    sign_service, sign_evid, sign_key, sign_time, old_loan_time, apply_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_loan
+    where loan_no = #{loanNo,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from user_loan
+    where loan_no = #{loanNo,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.UserLoan" >
+    insert into user_loan (loan_no, order_id, user_id, 
+      bank_id, loan_money, loan_days, 
+      loan_rate, loan_time, pay_status, 
+      pay_time, overdue_days, total_interest, 
+      total_uninterest, total_latefee, repayment_capital, 
+      repayment_interest, repayment_latefee, repayment_success_time, 
+      repay_status, bill_no, device_type, 
+      partner_use_flg, agency_id, sign_status, 
+      stage_times, repay_issue, apply_status, 
+      sign_remark, sign_url, pay_evdience, 
+      repay_grant_status, sign_service, sign_evid, 
+      sign_key, sign_time, old_loan_time, 
+      apply_no)
+    values (#{loanNo,jdbcType=CHAR}, #{orderId,jdbcType=CHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{bankId,jdbcType=INTEGER}, #{loanMoney,jdbcType=DECIMAL}, #{loanDays,jdbcType=SMALLINT}, 
+      #{loanRate,jdbcType=DECIMAL}, #{loanTime,jdbcType=INTEGER}, #{payStatus,jdbcType=TINYINT}, 
+      #{payTime,jdbcType=INTEGER}, #{overdueDays,jdbcType=SMALLINT}, #{totalInterest,jdbcType=DECIMAL}, 
+      #{totalUninterest,jdbcType=DECIMAL}, #{totalLatefee,jdbcType=DECIMAL}, #{repaymentCapital,jdbcType=DECIMAL}, 
+      #{repaymentInterest,jdbcType=DECIMAL}, #{repaymentLatefee,jdbcType=DECIMAL}, #{repaymentSuccessTime,jdbcType=INTEGER}, 
+      #{repayStatus,jdbcType=TINYINT}, #{billNo,jdbcType=VARCHAR}, #{deviceType,jdbcType=TINYINT}, 
+      #{partnerUseFlg,jdbcType=TINYINT}, #{agencyId,jdbcType=INTEGER}, #{signStatus,jdbcType=TINYINT}, 
+      #{stageTimes,jdbcType=TINYINT}, #{repayIssue,jdbcType=INTEGER}, #{applyStatus,jdbcType=TINYINT}, 
+      #{signRemark,jdbcType=VARCHAR}, #{signUrl,jdbcType=VARCHAR}, #{payEvdience,jdbcType=VARCHAR}, 
+      #{repayGrantStatus,jdbcType=TINYINT}, #{signService,jdbcType=VARCHAR}, #{signEvid,jdbcType=VARCHAR}, 
+      #{signKey,jdbcType=VARCHAR}, #{signTime,jdbcType=INTEGER}, #{oldLoanTime,jdbcType=INTEGER}, 
+      #{applyNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserLoan" >
+    insert into user_loan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanNo != null" >
+        loan_no,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="bankId != null" >
+        bank_id,
+      </if>
+      <if test="loanMoney != null" >
+        loan_money,
+      </if>
+      <if test="loanDays != null" >
+        loan_days,
+      </if>
+      <if test="loanRate != null" >
+        loan_rate,
+      </if>
+      <if test="loanTime != null" >
+        loan_time,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="overdueDays != null" >
+        overdue_days,
+      </if>
+      <if test="totalInterest != null" >
+        total_interest,
+      </if>
+      <if test="totalUninterest != null" >
+        total_uninterest,
+      </if>
+      <if test="totalLatefee != null" >
+        total_latefee,
+      </if>
+      <if test="repaymentCapital != null" >
+        repayment_capital,
+      </if>
+      <if test="repaymentInterest != null" >
+        repayment_interest,
+      </if>
+      <if test="repaymentLatefee != null" >
+        repayment_latefee,
+      </if>
+      <if test="repaymentSuccessTime != null" >
+        repayment_success_time,
+      </if>
+      <if test="repayStatus != null" >
+        repay_status,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="deviceType != null" >
+        device_type,
+      </if>
+      <if test="partnerUseFlg != null" >
+        partner_use_flg,
+      </if>
+      <if test="agencyId != null" >
+        agency_id,
+      </if>
+      <if test="signStatus != null" >
+        sign_status,
+      </if>
+      <if test="stageTimes != null" >
+        stage_times,
+      </if>
+      <if test="repayIssue != null" >
+        repay_issue,
+      </if>
+      <if test="applyStatus != null" >
+        apply_status,
+      </if>
+      <if test="signRemark != null" >
+        sign_remark,
+      </if>
+      <if test="signUrl != null" >
+        sign_url,
+      </if>
+      <if test="payEvdience != null" >
+        pay_evdience,
+      </if>
+      <if test="repayGrantStatus != null" >
+        repay_grant_status,
+      </if>
+      <if test="signService != null" >
+        sign_service,
+      </if>
+      <if test="signEvid != null" >
+        sign_evid,
+      </if>
+      <if test="signKey != null" >
+        sign_key,
+      </if>
+      <if test="signTime != null" >
+        sign_time,
+      </if>
+      <if test="oldLoanTime != null" >
+        old_loan_time,
+      </if>
+      <if test="applyNo != null" >
+        apply_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanNo != null" >
+        #{loanNo,jdbcType=CHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=CHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="loanMoney != null" >
+        #{loanMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="loanDays != null" >
+        #{loanDays,jdbcType=SMALLINT},
+      </if>
+      <if test="loanRate != null" >
+        #{loanRate,jdbcType=DECIMAL},
+      </if>
+      <if test="loanTime != null" >
+        #{loanTime,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=INTEGER},
+      </if>
+      <if test="overdueDays != null" >
+        #{overdueDays,jdbcType=SMALLINT},
+      </if>
+      <if test="totalInterest != null" >
+        #{totalInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="totalUninterest != null" >
+        #{totalUninterest,jdbcType=DECIMAL},
+      </if>
+      <if test="totalLatefee != null" >
+        #{totalLatefee,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentCapital != null" >
+        #{repaymentCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentInterest != null" >
+        #{repaymentInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentLatefee != null" >
+        #{repaymentLatefee,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentSuccessTime != null" >
+        #{repaymentSuccessTime,jdbcType=INTEGER},
+      </if>
+      <if test="repayStatus != null" >
+        #{repayStatus,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=TINYINT},
+      </if>
+      <if test="partnerUseFlg != null" >
+        #{partnerUseFlg,jdbcType=TINYINT},
+      </if>
+      <if test="agencyId != null" >
+        #{agencyId,jdbcType=INTEGER},
+      </if>
+      <if test="signStatus != null" >
+        #{signStatus,jdbcType=TINYINT},
+      </if>
+      <if test="stageTimes != null" >
+        #{stageTimes,jdbcType=TINYINT},
+      </if>
+      <if test="repayIssue != null" >
+        #{repayIssue,jdbcType=INTEGER},
+      </if>
+      <if test="applyStatus != null" >
+        #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="signRemark != null" >
+        #{signRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="signUrl != null" >
+        #{signUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="payEvdience != null" >
+        #{payEvdience,jdbcType=VARCHAR},
+      </if>
+      <if test="repayGrantStatus != null" >
+        #{repayGrantStatus,jdbcType=TINYINT},
+      </if>
+      <if test="signService != null" >
+        #{signService,jdbcType=VARCHAR},
+      </if>
+      <if test="signEvid != null" >
+        #{signEvid,jdbcType=VARCHAR},
+      </if>
+      <if test="signKey != null" >
+        #{signKey,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null" >
+        #{signTime,jdbcType=INTEGER},
+      </if>
+      <if test="oldLoanTime != null" >
+        #{oldLoanTime,jdbcType=INTEGER},
+      </if>
+      <if test="applyNo != null" >
+        #{applyNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.UserLoan" >
+    update user_loan
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=CHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="loanMoney != null" >
+        loan_money = #{loanMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="loanDays != null" >
+        loan_days = #{loanDays,jdbcType=SMALLINT},
+      </if>
+      <if test="loanRate != null" >
+        loan_rate = #{loanRate,jdbcType=DECIMAL},
+      </if>
+      <if test="loanTime != null" >
+        loan_time = #{loanTime,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=INTEGER},
+      </if>
+      <if test="overdueDays != null" >
+        overdue_days = #{overdueDays,jdbcType=SMALLINT},
+      </if>
+      <if test="totalInterest != null" >
+        total_interest = #{totalInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="totalUninterest != null" >
+        total_uninterest = #{totalUninterest,jdbcType=DECIMAL},
+      </if>
+      <if test="totalLatefee != null" >
+        total_latefee = #{totalLatefee,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentCapital != null" >
+        repayment_capital = #{repaymentCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentInterest != null" >
+        repayment_interest = #{repaymentInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentLatefee != null" >
+        repayment_latefee = #{repaymentLatefee,jdbcType=DECIMAL},
+      </if>
+      <if test="repaymentSuccessTime != null" >
+        repayment_success_time = #{repaymentSuccessTime,jdbcType=INTEGER},
+      </if>
+      <if test="repayStatus != null" >
+        repay_status = #{repayStatus,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null" >
+        device_type = #{deviceType,jdbcType=TINYINT},
+      </if>
+      <if test="partnerUseFlg != null" >
+        partner_use_flg = #{partnerUseFlg,jdbcType=TINYINT},
+      </if>
+      <if test="agencyId != null" >
+        agency_id = #{agencyId,jdbcType=INTEGER},
+      </if>
+      <if test="signStatus != null" >
+        sign_status = #{signStatus,jdbcType=TINYINT},
+      </if>
+      <if test="stageTimes != null" >
+        stage_times = #{stageTimes,jdbcType=TINYINT},
+      </if>
+      <if test="repayIssue != null" >
+        repay_issue = #{repayIssue,jdbcType=INTEGER},
+      </if>
+      <if test="applyStatus != null" >
+        apply_status = #{applyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="signRemark != null" >
+        sign_remark = #{signRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="signUrl != null" >
+        sign_url = #{signUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="payEvdience != null" >
+        pay_evdience = #{payEvdience,jdbcType=VARCHAR},
+      </if>
+      <if test="repayGrantStatus != null" >
+        repay_grant_status = #{repayGrantStatus,jdbcType=TINYINT},
+      </if>
+      <if test="signService != null" >
+        sign_service = #{signService,jdbcType=VARCHAR},
+      </if>
+      <if test="signEvid != null" >
+        sign_evid = #{signEvid,jdbcType=VARCHAR},
+      </if>
+      <if test="signKey != null" >
+        sign_key = #{signKey,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null" >
+        sign_time = #{signTime,jdbcType=INTEGER},
+      </if>
+      <if test="oldLoanTime != null" >
+        old_loan_time = #{oldLoanTime,jdbcType=INTEGER},
+      </if>
+      <if test="applyNo != null" >
+        apply_no = #{applyNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where loan_no = #{loanNo,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.UserLoan" >
+    update user_loan
+    set order_id = #{orderId,jdbcType=CHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=INTEGER},
+      loan_money = #{loanMoney,jdbcType=DECIMAL},
+      loan_days = #{loanDays,jdbcType=SMALLINT},
+      loan_rate = #{loanRate,jdbcType=DECIMAL},
+      loan_time = #{loanTime,jdbcType=INTEGER},
+      pay_status = #{payStatus,jdbcType=TINYINT},
+      pay_time = #{payTime,jdbcType=INTEGER},
+      overdue_days = #{overdueDays,jdbcType=SMALLINT},
+      total_interest = #{totalInterest,jdbcType=DECIMAL},
+      total_uninterest = #{totalUninterest,jdbcType=DECIMAL},
+      total_latefee = #{totalLatefee,jdbcType=DECIMAL},
+      repayment_capital = #{repaymentCapital,jdbcType=DECIMAL},
+      repayment_interest = #{repaymentInterest,jdbcType=DECIMAL},
+      repayment_latefee = #{repaymentLatefee,jdbcType=DECIMAL},
+      repayment_success_time = #{repaymentSuccessTime,jdbcType=INTEGER},
+      repay_status = #{repayStatus,jdbcType=TINYINT},
+      bill_no = #{billNo,jdbcType=VARCHAR},
+      device_type = #{deviceType,jdbcType=TINYINT},
+      partner_use_flg = #{partnerUseFlg,jdbcType=TINYINT},
+      agency_id = #{agencyId,jdbcType=INTEGER},
+      sign_status = #{signStatus,jdbcType=TINYINT},
+      stage_times = #{stageTimes,jdbcType=TINYINT},
+      repay_issue = #{repayIssue,jdbcType=INTEGER},
+      apply_status = #{applyStatus,jdbcType=TINYINT},
+      sign_remark = #{signRemark,jdbcType=VARCHAR},
+      sign_url = #{signUrl,jdbcType=VARCHAR},
+      pay_evdience = #{payEvdience,jdbcType=VARCHAR},
+      repay_grant_status = #{repayGrantStatus,jdbcType=TINYINT},
+      sign_service = #{signService,jdbcType=VARCHAR},
+      sign_evid = #{signEvid,jdbcType=VARCHAR},
+      sign_key = #{signKey,jdbcType=VARCHAR},
+      sign_time = #{signTime,jdbcType=INTEGER},
+      old_loan_time = #{oldLoanTime,jdbcType=INTEGER},
+      apply_no = #{applyNo,jdbcType=VARCHAR}
+    where loan_no = #{loanNo,jdbcType=CHAR}
+  </update>
+</mapper>

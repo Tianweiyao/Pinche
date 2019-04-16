@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.UserMarriageMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.UserMarriage" >
+    <id column="marriage_id" property="marriageId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="marriage_status" property="marriageStatus" jdbcType="TINYINT" />
+    <result column="spouse_name" property="spouseName" jdbcType="VARCHAR" />
+    <result column="spouse_mobile" property="spouseMobile" jdbcType="CHAR" />
+    <result column="living_area_no" property="livingAreaNo" jdbcType="CHAR" />
+    <result column="living_address" property="livingAddress" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    marriage_id, user_id, marriage_status, spouse_name, spouse_mobile, living_area_no,
+    living_address, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_marriage
+    where marriage_id = #{marriageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_marriage
+    where marriage_id = #{marriageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.UserMarriage" >
+    insert into user_marriage (marriage_id, user_id, marriage_status, 
+      spouse_name, spouse_mobile, living_area_no, 
+      living_address, create_time)
+    values (#{marriageId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{marriageStatus,jdbcType=TINYINT}, 
+      #{spouseName,jdbcType=VARCHAR}, #{spouseMobile,jdbcType=CHAR}, #{livingAreaNo,jdbcType=CHAR}, 
+      #{livingAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserMarriage" >
+    insert into user_marriage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="marriageId != null" >
+        marriage_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="marriageStatus != null" >
+        marriage_status,
+      </if>
+      <if test="spouseName != null" >
+        spouse_name,
+      </if>
+      <if test="spouseMobile != null" >
+        spouse_mobile,
+      </if>
+      <if test="livingAreaNo != null" >
+        living_area_no,
+      </if>
+      <if test="livingAddress != null" >
+        living_address,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="marriageId != null" >
+        #{marriageId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="marriageStatus != null" >
+        #{marriageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="spouseName != null" >
+        #{spouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="spouseMobile != null" >
+        #{spouseMobile,jdbcType=CHAR},
+      </if>
+      <if test="livingAreaNo != null" >
+        #{livingAreaNo,jdbcType=CHAR},
+      </if>
+      <if test="livingAddress != null" >
+        #{livingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.UserMarriage" >
+    update user_marriage
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="marriageStatus != null" >
+        marriage_status = #{marriageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="spouseName != null" >
+        spouse_name = #{spouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="spouseMobile != null" >
+        spouse_mobile = #{spouseMobile,jdbcType=CHAR},
+      </if>
+      <if test="livingAreaNo != null" >
+        living_area_no = #{livingAreaNo,jdbcType=CHAR},
+      </if>
+      <if test="livingAddress != null" >
+        living_address = #{livingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where marriage_id = #{marriageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.UserMarriage" >
+    update user_marriage
+    set user_id = #{userId,jdbcType=VARCHAR},
+      marriage_status = #{marriageStatus,jdbcType=TINYINT},
+      spouse_name = #{spouseName,jdbcType=VARCHAR},
+      spouse_mobile = #{spouseMobile,jdbcType=CHAR},
+      living_area_no = #{livingAreaNo,jdbcType=CHAR},
+      living_address = #{livingAddress,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where marriage_id = #{marriageId,jdbcType=INTEGER}
+  </update>
+</mapper>

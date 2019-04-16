@@ -1,10 +1,5 @@
 package com.hodehtml.demo.utils;
 
-import com.core.framework.constants.Constants;
-import com.core.framework.utils.CommonUtils;
-import com.core.framework.utils.StringUtils;
-import com.core.framework.utils.TraceInfoUtils;
-import com.core.framework.utils.ValidatorUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;

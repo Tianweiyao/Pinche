@@ -27,6 +27,7 @@ public class User {
     private String user_password;
     @ApiModelProperty("用户名")
     private String user_name;
+    private String token;
 
 
 

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.UserDebitBankMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.UserDebitBank" >
+    <id column="user_debit_id" property="userDebitId" jdbcType="INTEGER" />
+    <result column="bank_id" property="bankId" jdbcType="INTEGER" />
+    <result column="debit_account" property="debitAccount" jdbcType="VARCHAR" />
+    <result column="debit_code" property="debitCode" jdbcType="VARCHAR" />
+    <result column="debit_name" property="debitName" jdbcType="VARCHAR" />
+    <result column="debit_phone" property="debitPhone" jdbcType="VARCHAR" />
+    <result column="debit_status" property="debitStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="third_order_no" property="thirdOrderNo" jdbcType="VARCHAR" />
+    <result column="default_status" property="defaultStatus" jdbcType="INTEGER" />
+    <result column="token_id" property="tokenId" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_debit_id, bank_id, debit_account, debit_code, debit_name, debit_phone, debit_status, 
+    create_time, id_no, user_id, third_order_no, default_status, token_id, uuid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_debit_bank
+    where user_debit_id = #{userDebitId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_debit_bank
+    where user_debit_id = #{userDebitId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.UserDebitBank" >
+    insert into user_debit_bank (user_debit_id, bank_id, debit_account, 
+      debit_code, debit_name, debit_phone, 
+      debit_status, create_time, id_no, 
+      user_id, third_order_no, default_status, 
+      token_id, uuid)
+    values (#{userDebitId,jdbcType=INTEGER}, #{bankId,jdbcType=INTEGER}, #{debitAccount,jdbcType=VARCHAR}, 
+      #{debitCode,jdbcType=VARCHAR}, #{debitName,jdbcType=VARCHAR}, #{debitPhone,jdbcType=VARCHAR}, 
+      #{debitStatus,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{idNo,jdbcType=VARCHAR},
+      #{userId,jdbcType=VARCHAR}, #{thirdOrderNo,jdbcType=VARCHAR}, #{defaultStatus,jdbcType=INTEGER},
+      #{tokenId,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserDebitBank" >
+    insert into user_debit_bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userDebitId != null" >
+        user_debit_id,
+      </if>
+      <if test="bankId != null" >
+        bank_id,
+      </if>
+      <if test="debitAccount != null" >
+        debit_account,
+      </if>
+      <if test="debitCode != null" >
+        debit_code,
+      </if>
+      <if test="debitName != null" >
+        debit_name,
+      </if>
+      <if test="debitPhone != null" >
+        debit_phone,
+      </if>
+      <if test="debitStatus != null" >
+        debit_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="idNo != null" >
+        id_no,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="thirdOrderNo != null" >
+        third_order_no,
+      </if>
+      <if test="defaultStatus != null" >
+        default_status,
+      </if>
+      <if test="tokenId != null" >
+        token_id,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userDebitId != null" >
+        #{userDebitId,jdbcType=INTEGER},
+      </if>
+      <if test="bankId != null" >
+        #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="debitAccount != null" >
+        #{debitAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="debitCode != null" >
+        #{debitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="debitName != null" >
+        #{debitName,jdbcType=VARCHAR},
+      </if>
+      <if test="debitPhone != null" >
+        #{debitPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="debitStatus != null" >
+        #{debitStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="idNo != null" >
+        #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderNo != null" >
+        #{thirdOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultStatus != null" >
+        #{defaultStatus,jdbcType=BIT},
+      </if>
+      <if test="tokenId != null" >
+        #{tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.UserDebitBank" >
+    update user_debit_bank
+    <set >
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="debitAccount != null" >
+        debit_account = #{debitAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="debitCode != null" >
+        debit_code = #{debitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="debitName != null" >
+        debit_name = #{debitName,jdbcType=VARCHAR},
+      </if>
+      <if test="debitPhone != null" >
+        debit_phone = #{debitPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="debitStatus != null" >
+        debit_status = #{debitStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="idNo != null" >
+        id_no = #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderNo != null" >
+        third_order_no = #{thirdOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultStatus != null" >
+        default_status = #{defaultStatus,jdbcType=INTEGER},
+      </if>
+      <if test="tokenId != null" >
+        token_id = #{tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_debit_id = #{userDebitId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.UserDebitBank" >
+    update user_debit_bank
+    set bank_id = #{bankId,jdbcType=INTEGER},
+      debit_account = #{debitAccount,jdbcType=VARCHAR},
+      debit_code = #{debitCode,jdbcType=VARCHAR},
+      debit_name = #{debitName,jdbcType=VARCHAR},
+      debit_phone = #{debitPhone,jdbcType=VARCHAR},
+      debit_status = #{debitStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      id_no = #{idNo,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      third_order_no = #{thirdOrderNo,jdbcType=VARCHAR},
+      default_status = #{defaultStatus,jdbcType=INTEGER},
+      token_id = #{tokenId,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR}
+    where user_debit_id = #{userDebitId,jdbcType=INTEGER}
+  </update>
+</mapper>

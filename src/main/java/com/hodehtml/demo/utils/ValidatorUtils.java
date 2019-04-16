@@ -1,8 +1,8 @@
 package com.hodehtml.demo.utils;
 
-import com.hodehtml.demo.vo.EduException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -250,14 +250,14 @@ public class ValidatorUtils {
     	return v.matches(regex);
 	}
 	
-	public static boolean isDouble(String v){
+	/*public static boolean isDouble(String v){
 		v = StringUtils.nullToStrTrim(v);
 		if(v.length()==0){
 			return false;
 		}
 		Pattern pattern = Pattern.compile("^[-\\+]?[.\\d]*$");    
 	    return pattern.matcher(v).matches();
-	}
+	}*/
 	
 	public static boolean isInteger(String v){
 		if(!isDigital(v)){
@@ -344,17 +344,17 @@ public class ValidatorUtils {
 	
 	/**
 	 * 判断传入字符串是否包含汉字
-	 * @param str 传入字符串
+	 * @param
 	 * @return true 包含 false 不包含
 	 */
-	public static boolean isContainChinese(String str) {
+	/*public static boolean isContainChinese(String str) {
 		Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
 	    Matcher m = p.matcher(str);
 	    if (m.find()) {
 	       return true;
 	    }
 	    return false;
-	}
+	}*/
 	
 	public static boolean isVersion(String code){
 		code = StringUtils.nullToStrTrim(code);

@@ -1,10 +1,6 @@
 package com.hodehtml.demo.utils;
 
-import com.core.framework.config.PropertiesConfig;
-import com.core.framework.constants.Constants;
-import com.core.framework.utils.*;
 import org.apache.log4j.Logger;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -39,8 +35,6 @@ public class ResponseUtils {
 		if(!ValidatorUtils.isInfoCode(code)) {
 			code = String.valueOf(100002);
 		}
-		info.put("code", code);
-		info.put("msg", PropertiesConfig.getProperties("message.properties", code+""));
 		if(!code.equals(String.valueOf(100000))) {
 			info.put("logno", logno);
 		}

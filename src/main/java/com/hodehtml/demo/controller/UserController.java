@@ -2,88 +2,78 @@ package com.hodehtml.demo.controller;/**
  * created by pht on 2019/4/11 0011
  */
 
-import com.hodehtml.demo.utils.DesUtils;
-import com.hodehtml.demo.utils.ValidatorUtils;
-import com.hodehtml.demo.vo.EduException;
-import com.hodehtml.demo.vo.ServiceCoreVO;
+import com.hodehtml.demo.model.User;
+import com.hodehtml.demo.service.UserService;
+import com.hodehtml.demo.utils.*;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
+ * @author pht
  * @program demo
  * @date 2019/4/11 0011
- * @author pht
  */
 @Controller
 @RequestMapping("User")
 public class UserController extends BaseAction {
 
-    protected static final Log log = LogFactory.getLog(UserController.class);
+    Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @Resource
+    @Autowired
     private UserService userService;
-    @Resource
-    private ActivityService activityService;
-    @Resource
-    private UserTokenService userTokenService;
+    @Autowired
+    private LoginUtil loginUtil;
 
-    /**
-     * 判断用户账号是否存在
-     *
-     * @return
-     * @throws EduException
-     */
-    @RequestMapping("/exists")
+
+    @ApiOperation("判断用户账号是否存在")
+    @RequestMapping(value = "/exists", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> existsV100(@RequestParam("user_mobile") String userMobile) throws EduException {
+        Map<String, Object> map = new HashMap<String, Object>();
         //用户手机号判断
         ValidatorUtils.isLoginMobile(userMobile);
         //判断注册手机号是否存在  1存在 2不存在
         if (userService.userMobileExists(userMobile)) {
-            resobject.put("exists", "1");
+            map.put("exists", "1");
         } else {
-            resobject.put("exists", "2");
+            map.put("exists", "2");
         }
-        return resobject;
+        return map;
     }
 
 
-    /**
-     * 注册
-     *
-     * @return
-     * @throws EduException
-     */
-    @RequestMapping("/exist")
+    @ApiOperation("注册")
+    @RequestMapping(value = "/exist", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> existV100() throws EduException {
+    public Map<String, Object> existV100(HttpServletRequest request,@RequestBody User user) throws EduException {
+        Map<String, Object> map = new HashMap<String, Object>();
         //用户信息校验
-        String userMobile = getRequestContentValue("user_mobile");
-        ValidatorUtils.isLoginMobile(userMobile);
-        if (userService.userMobileExists(userMobile)) {
+        ValidatorUtils.isLoginMobile(user.getUser_mobile());
+        if (userService.userMobileExists(user.getUser_mobile())) {
             throw new EduException(200102);
         }
         //验证码校验
-        String valicode = getRequestContentValue("valicode");
-        if (!ValidatorUtils.isSms(valicode)) {
+        if (!ValidatorUtils.isSms(user.getValicode())) {
             throw new EduException(200108);
         }
-        //是否是代理人的二维码的用户
-        String qrcodeKey = "";
-        String qrcode_key = getRequestContentValue("qrcode_key");
-        if (ValidatorUtils.isNotNull(qrcode_key)) {
-            qrcodeKey = qrcode_key;
+        String value = JedisUtil.get(user.getUser_mobile());
+        if (!value.equals(user.getValicode())){
+            throw new EduException(200108);
         }
+
         //登录密码
-        String password = getRequestContentValue("user_password");
+        String password = user.getUser_password();
         String realPwd = null;
         try {
             //密码解密
@@ -98,49 +88,37 @@ public class UserController extends BaseAction {
         }
         //判断是否若密码
         ValidatorUtils.isWeakPassword(realPwd);
-
-        //推荐人手机号
-        String recommendMobile = getRequestContentValue("recommend_mobile");
-        if (ValidatorUtils.isNotNull(recommendMobile) && !ValidatorUtils.isMobile(recommendMobile)) {
-            throw new EduException(200110);
-        }
-
-        Map<String, String> params = new LinkedHashMap<String, String>();
-        params.put("userMobile", userMobile);
-        params.put("valicode", valicode);
-        params.put("qrcodeKey", qrcodeKey);
-        params.put("password", realPwd);
-        params.put("recommendMobile", recommendMobile);
-        params.put("devicePort", devicePort);
-        params.put("trackid", trackid);
-        log.info("注册参数信息-" + params.toString());
-        userService.reg(params);
-        return loginV100();
+        user.setUuid(UUID.randomUUID().toString().replace("-",""));
+        user.setUser_password(MD5.md5(realPwd,"utf-8"));
+        user.setToken(MD5.md5(user.getUser_mobile()+realPwd+new Date(),"utf-8"));
+        log.info("注册参数信息-" + user.toString());
+        userService.reg(user);
+        return loginV100(request,user);
     }
 
-    /**
-     * 修改密码
-     *
-     * @return
-     * @throws EduException
-     */
-    @RequestMapping("/iforgot")
+
+    @ApiOperation("修改密码")
+    @RequestMapping(value = "/iforgot", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> iforgotV100() throws EduException {
+    public Map<String, Object> iforgotV100(@RequestBody User user) throws EduException {
         //用户信息校验
-        String userMobile = getRequestContentValue("user_mobile");
+        Map<String, Object> map = new HashMap<String, Object>();
+        String userMobile = user.getUser_mobile();
         ValidatorUtils.isLoginMobile(userMobile);
         if (!userService.userMobileExists(userMobile)) {
             throw new EduException(200104);
         }
         //验证码校验
-        String valicode = getRequestContentValue("valicode");
+        String valicode = user.getValicode();
         if (!ValidatorUtils.isSms(valicode)) {
             throw new EduException(200108);
         }
-
+        String value = JedisUtil.get(user.getUser_mobile());
+        if (!value.equals(user.getValicode())){
+            throw new EduException(200108);
+        }
         //登录密码
-        String password = getRequestContentValue("user_password");
+        String password = user.getUser_password();
         String realPwd = null;
         try {
             realPwd = DesUtils.decrypt(password, desKey);
@@ -154,34 +132,26 @@ public class UserController extends BaseAction {
         }
         //判断是否若密码
         ValidatorUtils.isWeakPassword(realPwd);
-
-        //真实操作
-        Map<String, String> params = new LinkedHashMap<String, String>();
-        params.put("userMobile", userMobile);
-        params.put("valicode", valicode);
-        params.put("password", realPwd);
-        log.info("修改密码参数信息-" + params.toString());
-        userService.iforgot(params);
-        resobject.put("message","success");
-        return resobject;
+        user.setUser_password(MD5.md5(realPwd,"utf-8"));
+        user.setToken(MD5.md5(user.getUser_mobile()+realPwd+new Date(),"utf-8"));
+        log.info("修改密码参数信息-" + user.toString());
+        userService.iforgot(user);
+        map.put("message", "success");
+        return map;
     }
 
 
-    /**
-     * 登录
-     *
-     * @return
-     * @throws EduException
-     */
-    @RequestMapping("/login")
+    @ApiOperation("登录")
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> loginV100() throws EduException {
+    public Map<String, Object> loginV100(HttpServletRequest request, @RequestBody User user) throws EduException {
+        Map<String, Object> map = new HashMap<String, Object>();
         //用户信息校验
-        String userMobile = getRequestContentValue("user_mobile");
+        String userMobile = user.getUser_mobile();
         ValidatorUtils.isLoginMobile(userMobile);
-
+        HttpSession session = request.getSession();
         //登录密码
-        String password = getRequestContentValue("user_password");
+        String password = user.getUser_password();
         String realPwd = null;
         try {
             //登录密码解密
@@ -194,31 +164,55 @@ public class UserController extends BaseAction {
         if (!ValidatorUtils.isPassword(realPwd)) {
             throw new EduException(200111);
         }
-        Map<String, String> params = new LinkedHashMap<String, String>();
-        params.put("userMobile", userMobile);
-        params.put("password", realPwd);
-        params.put("devicePort", devicePort);
-        params.put("reqip", reqip);
-        params.put("device_version", getRequestContentValue("device_version"));
-        params.put("longitude", getRequestContentValue("longitude"));
-        params.put("latitude", getRequestContentValue("latitude"));
-        params.put("device_id", getRequestContentValue("device_id"));
-        params.put("device_os", getRequestContentValue("device_os"));
-        params.put("device_name", getRequestContentValue("device_name"));
-        params.put("device_detail", getRequestContentValue("device_detail"));
-        params.put("jiguang_id", getRequestContentValue("registration_id"));
-        Map<String, Object> result = userService.login(params);
-        resobject.putAll(result);
-		/*try {
-			//新增国庆活动
-			params = new LinkedHashMap<String, String>();
-			params.put("userId", result.get("user_id")+"");
-			params.put("act_code", "guoqing2017");
-			activityService.login(params);
-		} catch (Exception e) {
-			log.error("加入活动信息失败",e);
-		}*/
-        return resobject;
+        user.setUser_password(MD5.md5(realPwd,"utf-8"));
+        User user1 = userService.login(user);
+        if (user1 != null) {
+            session.setAttribute("token", user1.getToken());
+            session.setAttribute("user", user1);
+            session.setMaxInactiveInterval(30 * 60);//20分钟失效
+            loginUtil.LoginUtil(session);
+            JedisUtil.addObject(user1.getToken(),user1);
+            JedisUtil.disableTime(user1.getToken(),user1.toString(),6000);
+            System.out.println("session" + session.getAttribute("token"));
+            map.put("message", "登录成功");
+            map.put("code", Code.successCode);
+        } else if (user1 == null) {
+            map.put("message", "手机号或密码不能正确");
+            map.put("code", Code.failCode);
+        }
+        return map;
+    }
+
+
+    @ApiOperation("发送短信")
+    @RequestMapping(value = "/smSsend", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> smSsend(@RequestParam("user_mobile") String user_mobile) {
+        Boolean result = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+        Double money = null;
+        String title = "注册短信发送";
+        String verifyCode = String
+                .valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
+        //手机号  可以多个手机号
+        String content = "您的验证码是：" + verifyCode;
+        result = SmsUtil.send(user_mobile, content, title); //发送短信
+        System.out.println(result);
+        if (result) {
+            boolean result1 = JedisUtil.existsKey(user_mobile);
+            if (result1) { //如果已存在
+                JedisUtil.delKey(user_mobile);
+                JedisUtil.addValue(user_mobile, verifyCode);
+            } else {
+                JedisUtil.addValue(user_mobile, verifyCode);
+            }
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }else {
+            map.put("message", "短信发送失败");
+            map.put("code", Code.failCode);
+        }
+        return map;
     }
 
 }

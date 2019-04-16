@@ -1,11 +1,7 @@
-package com.hodehtml.demo.controller;/**
+package com.hodehtml.demo.utils;/**
  * created by pht on 2019/4/11 0011
  */
 
-import com.hodehtml.demo.utils.ApiUtils;
-import com.hodehtml.demo.utils.TraceInfoUtils;
-import com.hodehtml.demo.utils.ValidatorUtils;
-import com.hodehtml.demo.utils.WebUtils;
 import com.hodehtml.demo.vo.DeviceTypeEnum;
 import com.hodehtml.demo.vo.EduException;
 import com.hodehtml.demo.vo.ServiceCoreVO;

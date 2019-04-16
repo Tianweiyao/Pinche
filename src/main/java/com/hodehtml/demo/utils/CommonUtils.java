@@ -1,7 +1,6 @@
 package com.hodehtml.demo.utils;
 
-import com.core.framework.config.PropertiesConfig;
-import com.core.framework.exception.EduException;
+import com.hodehtml.demo.vo.EduException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -13,10 +12,10 @@ import java.util.*;
 public class CommonUtils {
 	private static final Log log = LogFactory.getLog(CommonUtils.class);
 
-	private static final String CARD_ID = PropertiesConfig.getProperties("token", "card_id");
-	private static final String BANK_ACCOUNT = PropertiesConfig.getProperties("token", "bank_account");
-	private static final String USER_TOKEN = PropertiesConfig.getProperties("token", "user_token");
-	private static final String LOGIN_PWD = PropertiesConfig.getProperties("token", "login_pwd");
+	private static final String CARD_ID = null;
+	private static final String BANK_ACCOUNT = null;
+	private static final String USER_TOKEN = null;
+	private static final String LOGIN_PWD = null;
 	
 	private static Random rand = null;
 
