@@ -14,6 +14,8 @@ public interface UserInfoMapper {
 
     UserInfo selectByPrimaryKey(@Param("infoId") Integer infoId);
 
+    UserInfo selectByUserId(@Param("userId") String userId);
+
     void updateByPrimaryKeySelective(UserInfo record);
 
     void updateByPrimaryKey(UserInfo record);

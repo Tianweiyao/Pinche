@@ -27,6 +27,14 @@
     from user_debit_bank
     where user_debit_id = #{userDebitId,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user_debit_bank
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user_debit_bank
     where user_debit_id = #{userDebitId,jdbcType=INTEGER}
