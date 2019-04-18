@@ -3,6 +3,8 @@ package com.hodehtml.demo.controller;/**
  */
 
 import com.hodehtml.demo.model.User;
+import com.hodehtml.demo.model.UserInfo;
+import com.hodehtml.demo.service.UserInformationService;
 import com.hodehtml.demo.service.UserService;
 import com.hodehtml.demo.utils.*;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,8 @@ public class UserController extends BaseAction {
     private UserService userService;
     @Autowired
     private LoginUtil loginUtil;
+    @Autowired
+    private UserInformationService userInformationService;
 
 
     @ApiOperation("判断用户账号是否存在")
@@ -54,46 +58,51 @@ public class UserController extends BaseAction {
 
 
     @ApiOperation("注册")
-    @RequestMapping(value = "/exist", method = RequestMethod.POST)
+    @RequestMapping(value = "/exist", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> existV100(HttpServletRequest request,@RequestBody User user) throws EduException {
+    public Map<String, Object> existV100(HttpServletRequest request,@RequestParam("user_mobile") String user_mobile,@RequestParam("valicode") String valicode,@RequestParam("user_password") String user_password) throws EduException {
         Map<String, Object> map = new HashMap<String, Object>();
         //用户信息校验
-        ValidatorUtils.isLoginMobile(user.getUser_mobile());
-        if (userService.userMobileExists(user.getUser_mobile())) {
+        ValidatorUtils.isLoginMobile(user_mobile);
+        if (userService.userMobileExists(user_mobile)) {
             throw new EduException(200102);
         }
         //验证码校验
-        if (!ValidatorUtils.isSms(user.getValicode())) {
+        if (!ValidatorUtils.isSms(valicode)) {
             throw new EduException(200108);
         }
-        String value = JedisUtil.get(user.getUser_mobile());
-        if (!value.equals(user.getValicode())){
+        String value = JedisUtil.get(user_mobile);
+        if (!value.equals(valicode)){
             throw new EduException(200108);
         }
-
         //登录密码
-        String password = user.getUser_password();
-        String realPwd = null;
-        try {
-            //密码解密
-            realPwd = DesUtils.decrypt(password, desKey);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(" reg pwd:" + password + " deskey:" + desKey, e);
-            throw new EduException(110075);
-        }
-        if (!ValidatorUtils.isPassword(realPwd)) {
+        String password = user_password;
+        String password1 = password;
+        if (!ValidatorUtils.isPassword(password)) {
             throw new EduException(200111);
         }
+        String userId = UUID.randomUUID().toString().replace("-","");
         //判断是否若密码
-        ValidatorUtils.isWeakPassword(realPwd);
-        user.setUuid(UUID.randomUUID().toString().replace("-",""));
-        user.setUser_password(MD5.md5(realPwd,"utf-8"));
-        user.setToken(MD5.md5(user.getUser_mobile()+realPwd+new Date(),"utf-8"));
+        ValidatorUtils.isWeakPassword(password);
+        User user = new User();
+        user.setUser_mobile(user_mobile);
+        user.setValicode(valicode);
+        user.setUuid(userId);
+        user.setUser_password(MD5.md5(password,"utf-8"));
+        user.setToken(MD5.md5(user.getUser_mobile()+password+new Date(),"utf-8"));
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userId);
+        userInfo.setAuthStatus((byte)0);
+        userInfo.setAuthStep((byte)0);
+        userInfo.setCreateTime(new Date().toString());
+        userInfo.setPeriods((short)2);
+        userInfo.setRealPeriods((short)0);
+        userInfo.setLoanDays(7);
+        userInformationService.insertUserInfo(userInfo);
         log.info("注册参数信息-" + user.toString());
         userService.reg(user);
-        return loginV100(request,user);
+        user.setUser_password(password1);
+        return loginV100(request,user_mobile,password1);
     }
 
 
@@ -119,21 +128,19 @@ public class UserController extends BaseAction {
         }
         //登录密码
         String password = user.getUser_password();
-        String realPwd = null;
+        /*String realPwd = null;
         try {
             realPwd = DesUtils.decrypt(password, desKey);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(" ifrogot pwd:" + password + " deskey:" + desKey, e);
             throw new EduException(110075);
-        }
-        if (!ValidatorUtils.isPassword(realPwd)) {
+        }*/
+        if (!ValidatorUtils.isPassword(password)) {
             throw new EduException(200111);
         }
-        //判断是否若密码
-        ValidatorUtils.isWeakPassword(realPwd);
-        user.setUser_password(MD5.md5(realPwd,"utf-8"));
-        user.setToken(MD5.md5(user.getUser_mobile()+realPwd+new Date(),"utf-8"));
+        user.setUser_password(MD5.md5(password,"utf-8"));
+        user.setToken(MD5.md5(user.getUser_mobile()+password+new Date(),"utf-8"));
         log.info("修改密码参数信息-" + user.toString());
         userService.iforgot(user);
         map.put("message", "success");
@@ -142,17 +149,17 @@ public class UserController extends BaseAction {
 
 
     @ApiOperation("登录")
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> loginV100(HttpServletRequest request, @RequestBody User user) throws EduException {
+    public Map<String, Object> loginV100(HttpServletRequest request,@RequestParam("user_mobile") String user_mobile,@RequestParam("user_password") String user_password) throws EduException {
         Map<String, Object> map = new HashMap<String, Object>();
         //用户信息校验
-        String userMobile = user.getUser_mobile();
+        String userMobile = user_mobile;
         ValidatorUtils.isLoginMobile(userMobile);
         HttpSession session = request.getSession();
         //登录密码
-        String password = user.getUser_password();
-        String realPwd = null;
+        String password = user_password;
+        /*String realPwd = null;
         try {
             //登录密码解密
             realPwd = DesUtils.decrypt(password, desKey);
@@ -160,11 +167,13 @@ public class UserController extends BaseAction {
             e.printStackTrace();
             log.error(" login pwd:" + password + " deskey:" + desKey, e);
             throw new EduException(110075);
-        }
-        if (!ValidatorUtils.isPassword(realPwd)) {
+        }*/
+        if (!ValidatorUtils.isPassword(password)) {
             throw new EduException(200111);
         }
-        user.setUser_password(MD5.md5(realPwd,"utf-8"));
+        User user = new User();
+        user.setUser_mobile(userMobile);
+        user.setUser_password(MD5.md5(password,"utf-8"));
         User user1 = userService.login(user);
         if (user1 != null) {
             session.setAttribute("token", user1.getToken());

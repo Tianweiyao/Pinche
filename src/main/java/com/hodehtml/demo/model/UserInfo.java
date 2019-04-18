@@ -33,7 +33,9 @@ public class UserInfo {
     @ApiModelProperty("现居时长[0 3个月内;1 3-6个月;2 6-12个月;3 1-3年;4 3年以上;]")
     private Short livingTimes;
     private String userEmail;
+    @ApiModelProperty("认证状态[0待提交;1审核中;2审核通过;3审核不通过]")
     private Byte authStatus;
+    @ApiModelProperty("认证状态[0待提交;1审核中;2审核通过;3审核不通过]")
     private Byte authStep;
     private String createTime;
     private Integer lastUpdateTime;
@@ -44,10 +46,13 @@ public class UserInfo {
     private Byte distributionStatus;
     private Byte connectStatus;
     private Short income;
+    @ApiModelProperty("没登录之前显示可借金额数")
     private Short periods;
+    @ApiModelProperty("登录之后显示可借金额数")
     private Short realPeriods;
     @ApiModelProperty("借款天数")
     private Integer loanDays;
     private String userJinji;
+    private String userWeiXin;
 
 }

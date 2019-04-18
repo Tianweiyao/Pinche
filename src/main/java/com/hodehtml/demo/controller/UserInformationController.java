@@ -6,6 +6,8 @@ import com.hodehtml.demo.model.*;
 import com.hodehtml.demo.service.UserInformationService;
 import com.hodehtml.demo.utils.Code;
 import com.hodehtml.demo.utils.LoginUtil;
+import com.hodehtml.demo.vo.UserContactsVo;
+import com.hodehtml.demo.vo.UserInfoVo;
 import io.swagger.annotations.ApiOperation;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -72,6 +74,27 @@ public class UserInformationController {
                 logger.info("异常==" + e);
             }
             userInformationService.insertFaceRecognition(grabFaceRecognition);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+    @ApiOperation("申请提额")
+    @ResponseBody
+    @RequestMapping(value = "/ApplicationRaise", method = RequestMethod.POST)
+    public Map<String, Object> ApplicationRaise(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+           UserInfo userInfo = new UserInfo();
+           userInfo.setUserId(user.getUuid());
+           userInfo.setRealPeriods((short)1);
+           userInfo.setAuthStatus((byte)1);
+            userInformationService.updateByPrimaryKeySelective(userInfo);
             map.put("message", "success");
             map.put("code", Code.successCode);
         }
@@ -156,24 +179,6 @@ public class UserInformationController {
         return map;
     }
 
-    @ApiOperation("插入个人信息")
-    @ResponseBody
-    @RequestMapping(value = "/insertUserInfo", method = RequestMethod.POST)
-    public Map<String, Object> insertUserInfo(@RequestBody UserInfo userInfo) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        User user = loginUtil.verification();
-        if (user == null) {
-            map.put("message", "请重新登陆");
-            map.put("code", Code.reLoginCode);
-        } else {
-            userInfo.setAuthStatus((byte) 0);
-            userInfo.setPeriods((short) 2);
-            userInformationService.insertUserInfo(userInfo);
-            map.put("message", "success");
-            map.put("code", Code.successCode);
-        }
-        return map;
-    }
 
     @ApiOperation("插入个人工作信息")
     @ResponseBody
@@ -192,6 +197,188 @@ public class UserInformationController {
         return map;
     }
 
+    @ApiOperation("查询个人工作信息")
+    @ResponseBody
+    @RequestMapping(value = "/SelectUserJob", method = RequestMethod.POST)
+    public Map<String, Object> SelectUserJob() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserJob userJob = userInformationService.selectByPrimaryKey(user.getUuid());
+            map.put("userJob", userJob);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+    @ApiOperation("查询紧急联系人信息")
+    @ResponseBody
+    @RequestMapping(value = "/SelectUserContacts", method = RequestMethod.POST)
+    public Map<String, Object> SelectUserContacts() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserContacts userContacts = userInformationService.selectUserContacts(user.getUuid());
+            map.put("userContacts", userContacts);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+    @ApiOperation("查入紧急联系人信息")
+    @ResponseBody
+    @RequestMapping(value = "/insertUserContacts", method = RequestMethod.POST)
+    public Map<String, Object> insertUserContacts(@RequestBody UserContactsVo contactsVo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            String[] directlyUnder = contactsVo.getDirectlyUnder();
+            String[] friend = contactsVo.getFriend();
+            String[] colleague = contactsVo.getColleague();
+            if(directlyUnder.length>0 && directlyUnder != null){
+                for (int i=0;i<directlyUnder.length;i++){
+                    UserContacts userContacts = new UserContacts();
+                    userContacts.setContactsMobile(directlyUnder[1]);
+                    userContacts.setContactsName(directlyUnder[0]);
+                    userContacts.setType(Integer.parseInt(directlyUnder[2]));
+                    userContacts.setUserId(user.getUuid());
+                    userInformationService.insertUserContacts(userContacts);
+                }
+            }
+            if(friend.length>0 && friend != null){
+                for (int i=0;i<friend.length;i++){
+                    UserContacts userContacts = new UserContacts();
+                    userContacts.setContactsMobile(friend[1]);
+                    userContacts.setContactsName(friend[0]);
+                    userContacts.setType(Integer.parseInt(friend[2]));
+                    userContacts.setUserId(user.getUuid());
+                    userInformationService.insertUserContacts(userContacts);
+                }
+            }
+            if(colleague.length>0 && colleague != null){
+                for (int i=0;i<colleague.length;i++){
+                    UserContacts userContacts = new UserContacts();
+                    userContacts.setContactsMobile(colleague[1]);
+                    userContacts.setContactsName(colleague[0]);
+                    userContacts.setType(Integer.parseInt(colleague[2]));
+                    userContacts.setUserId(user.getUuid());
+                    userInformationService.insertUserContacts(userContacts);
+                }
+            }
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+
+    @ApiOperation("查询社交工具")
+    @ResponseBody
+    @RequestMapping(value = "/SelectUserInfoVo", method = RequestMethod.POST)
+    public Map<String, Object> SelectUserInfoVo() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+            UserInfoVo userInfoVo = new UserInfoVo();
+            if(userInfo != null){
+                userInfoVo.setUserEmail(userInfo.getUserEmail());
+                userInfoVo.setUserWeiXin(userInfo.getUserWeiXin());
+            }
+            map.put("userContacts", userInfoVo);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+    @ApiOperation("查入社交工具")
+    @ResponseBody
+    @RequestMapping(value = "/insertUserInfoVo", method = RequestMethod.POST)
+    public Map<String, Object> insertUserInfoVo(@RequestBody UserInfoVo userInfoVo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+            userInfo.setUserEmail(userInfoVo.getUserEmail());
+            userInfo.setUserWeiXin(userInfoVo.getUserWeiXin());
+            userInfo.setUserId(user.getUuid());
+            userInformationService.updateByPrimaryKey(userInfo);
+            map.put("userContacts", userInfoVo);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+
+
+    @ApiOperation("查询个人信息")
+    @ResponseBody
+    @RequestMapping(value = "/selectInforMation", method = RequestMethod.POST)
+    public Map<String,Object> selectInforMation(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+            if(userInfo.getPeriods() == 0){
+                userInfo.setPeriods((short)1500);
+            }
+            if(userInfo.getPeriods() == 1){
+                userInfo.setPeriods((short)3000);
+            }
+            if(userInfo.getPeriods() == 2){
+                userInfo.setPeriods((short)8000);
+            }
+            if(userInfo.getPeriods() == 3){
+                userInfo.setPeriods((short)10000);
+            }
+            if(userInfo.getPeriods() == 4){
+                userInfo.setPeriods((short)50000);
+            }
+            if(userInfo.getRealPeriods() == 0){
+                userInfo.setRealPeriods((short)1500);
+            }
+            if(userInfo.getRealPeriods() == 1){
+                userInfo.setRealPeriods((short)3000);
+            }
+            if(userInfo.getRealPeriods() == 2){
+                userInfo.setRealPeriods((short)8000);
+            }
+            if(userInfo.getRealPeriods() == 3){
+                userInfo.setRealPeriods((short)10000);
+            }
+            if(userInfo.getRealPeriods() == 4){
+                userInfo.setRealPeriods((short)50000);
+            }
+            map.put("userInfo",userInfo);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+
     @ApiOperation("插入婚姻信息")
     @ResponseBody
     @RequestMapping(value = "/insertUserMarriage", method = RequestMethod.POST)
@@ -203,6 +390,24 @@ public class UserInformationController {
             map.put("code", Code.reLoginCode);
         } else {
             userInformationService.insertUserMarriage(userMarriage);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+    @ApiOperation("查询婚姻信息")
+    @ResponseBody
+    @RequestMapping(value = "/SelectUserMarriage", method = RequestMethod.POST)
+    public Map<String, Object> SelectUserMarriage() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserMarriage userMarriage = userInformationService.selectUserMarriage(user.getUuid());
+            map.put("userMarriage", userMarriage);
             map.put("message", "success");
             map.put("code", Code.successCode);
         }
@@ -243,6 +448,42 @@ public class UserInformationController {
         }
         return map;
     }
+
+    @ApiOperation("查询基础信息")
+    @ResponseBody
+    @RequestMapping(value = "/selectUserBace", method = RequestMethod.POST)
+    public Map<String,Object> selectUserBace(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            UserBace userBace = userInformationService.selectUserBace(user.getUuid());
+            map.put("userBace", userBace);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
+    @ApiOperation("插入基础信息")
+    @ResponseBody
+    @RequestMapping(value = "/insertUserBace", method = RequestMethod.POST)
+    public Map<String,Object> insertUserBace(UserBace userBace){
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+           userInformationService.insertUserBace(userBace);
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
 
     /**
      * 定时代扣 每天12点执行一次

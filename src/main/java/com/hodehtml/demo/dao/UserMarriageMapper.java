@@ -12,7 +12,7 @@ public interface UserMarriageMapper {
 
     void insertSelective(UserMarriage record);
 
-    UserMarriage selectByPrimaryKey(@Param("marriageId") Integer marriageId);
+    UserMarriage selectByPrimaryKey(@Param("UserId") String UserId);
 
     void updateByPrimaryKeySelective(UserMarriage record);
 

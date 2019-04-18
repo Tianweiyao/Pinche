@@ -17,11 +17,11 @@
     job_id, user_id, company_name, month_income, company_area_no, company_address, induction_times, 
     create_time, last_modify_time, company_post
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from user_job
-    where job_id = #{jobId,jdbcType=INTEGER}
+    where user_id = #{UserId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user_job

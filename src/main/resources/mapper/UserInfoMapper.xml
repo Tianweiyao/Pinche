@@ -32,13 +32,14 @@
     <result column="real_periods" property="realPeriods" jdbcType="SMALLINT" />
     <result column="loan_days" property="loanDays" jdbcType="INTEGER" />
     <result column="user_jinji" property="userJinji" jdbcType="VARCHAR" />
+    <result column="user_weixin" property="userWeiXin" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     info_id, user_id, user_name, user_sex, card_no, user_birth_year, user_birthday, province, 
     city, area, living_area_no, living_address, marital_status, living_times, user_email, 
     auth_status, auth_step, create_time, last_update_time, check_no, machine_remark, 
     loan_times, check_status, distribution_status, connect_status, income, periods, real_periods, 
-    loan_days, user_jinji
+    loan_days, user_jinji,user_weixin
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -60,7 +61,7 @@
       last_update_time, check_no, machine_remark, 
       loan_times, check_status, distribution_status, 
       connect_status, income, periods, 
-      real_periods, loan_days, user_jinji
+      real_periods, loan_days, user_jinji,user_weixin
       )
     values (#{infoId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
       #{userSex,jdbcType=TINYINT}, #{cardNo,jdbcType=CHAR}, #{userBirthYear,jdbcType=CHAR}, 
@@ -71,7 +72,7 @@
       #{lastUpdateTime,jdbcType=INTEGER}, #{checkNo,jdbcType=CHAR}, #{machineRemark,jdbcType=VARCHAR}, 
       #{loanTimes,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, #{distributionStatus,jdbcType=TINYINT}, 
       #{connectStatus,jdbcType=TINYINT}, #{income,jdbcType=SMALLINT}, #{periods,jdbcType=SMALLINT}, 
-      #{realPeriods,jdbcType=SMALLINT}, #{loanDays,jdbcType=INTEGER}, #{userJinji,jdbcType=VARCHAR}
+      #{realPeriods,jdbcType=SMALLINT}, #{loanDays,jdbcType=INTEGER}, #{userJinji,jdbcType=VARCHAR},#{userWeiXin,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserInfo" >
@@ -167,6 +168,9 @@
       <if test="userJinji != null" >
         user_jinji,
       </if>
+      <if test="userWeiXin != null" >
+        user_weixin
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="infoId != null" >
@@ -258,6 +262,9 @@
       </if>
       <if test="userJinji != null" >
         #{userJinji,jdbcType=VARCHAR},
+      </if>
+      <if test="userWeiXin != null" >
+        #{userWeiXin,jdbcType=VARCHAR}
       </if>
     </trim>
   </insert>
@@ -351,6 +358,9 @@
       <if test="userJinji != null" >
         user_jinji = #{userJinji,jdbcType=VARCHAR},
       </if>
+      <if test="userWeiXin != null" >
+        user_weixin = #{userWeiXin,jdbcType=VARCHAR}
+      </if>
     </set>
     where info_id = #{infoId,jdbcType=INTEGER}
   </update>
@@ -384,7 +394,14 @@
       periods = #{periods,jdbcType=SMALLINT},
       real_periods = #{realPeriods,jdbcType=SMALLINT},
       loan_days = #{loanDays,jdbcType=INTEGER},
-      user_jinji = #{userJinji,jdbcType=VARCHAR}
-    where info_id = #{infoId,jdbcType=INTEGER}
+      user_jinji = #{userJinji,jdbcType=VARCHAR},
+      user_weixin = #{userWeiXin,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+     select
+       <include refid="Base_Column_List"/>
+    FROM user_info WHERE user_id = #{userId,jdbcType=VARCHAR}
+  </select>
 </mapper>

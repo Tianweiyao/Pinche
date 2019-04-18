@@ -12,7 +12,7 @@ public interface UserJobMapper {
 
     void insertSelective(UserJob record);
 
-    UserJob selectByPrimaryKey(@Param("jobId") Integer jobId);
+    UserJob selectByPrimaryKey(@Param("UserId") String UserId);
 
     void updateByPrimaryKeySelective(UserJob record);
 

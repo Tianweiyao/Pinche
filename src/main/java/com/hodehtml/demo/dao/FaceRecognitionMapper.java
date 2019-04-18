@@ -14,6 +14,8 @@ public interface FaceRecognitionMapper {
 
     FaceRecognition selectByPrimaryKey(@Param("id") Integer id);
 
+    FaceRecognition selectByUserId(@Param("UserId") String UserId);
+
     int updateByPrimaryKeySelective(FaceRecognition record);
 
     int updateByPrimaryKey(FaceRecognition record);

@@ -13,7 +13,7 @@
   <sql id="Base_Column_List" >
     id, user_id, trade_no, create_time, grab_type, risk_report_logo,grab_data
   </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from reptile
