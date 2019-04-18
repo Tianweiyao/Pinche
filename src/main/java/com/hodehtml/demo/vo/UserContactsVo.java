@@ -24,5 +24,4 @@ public class UserContactsVo {
     @ApiModelProperty("同事")
     private String[] colleague;
 
-
 }
