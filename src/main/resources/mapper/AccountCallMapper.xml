@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.AccountCallMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.AccountCall" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="billMonth" property="billmonth" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="total_size" property="totalSize" jdbcType="INTEGER" />
+    <result column="details_id" property="detailsId" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
+    <result column="peer_number" property="peerNumber" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="location_type" property="locationType" jdbcType="VARCHAR" />
+    <result column="duration" property="duration" jdbcType="VARCHAR" />
+    <result column="dial_type" property="dialType" jdbcType="VARCHAR" />
+    <result column="fee" property="fee" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mobile, billMonth, code, message, total_size, details_id, time, peer_number, 
+    location, location_type, duration, dial_type, fee
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from account_call
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from account_call
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.AccountCall" >
+    insert into account_call (id, mobile, billMonth, 
+      code, message, total_size, 
+      details_id, time, peer_number, 
+      location, location_type, duration, 
+      dial_type, fee)
+    values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{billmonth,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{totalSize,jdbcType=INTEGER}, 
+      #{detailsId,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, #{peerNumber,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{locationType,jdbcType=VARCHAR}, #{duration,jdbcType=VARCHAR}, 
+      #{dialType,jdbcType=VARCHAR}, #{fee,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.AccountCall" >
+    insert into account_call
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="billmonth != null" >
+        billMonth,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="totalSize != null" >
+        total_size,
+      </if>
+      <if test="detailsId != null" >
+        details_id,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="peerNumber != null" >
+        peer_number,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="locationType != null" >
+        location_type,
+      </if>
+      <if test="duration != null" >
+        duration,
+      </if>
+      <if test="dialType != null" >
+        dial_type,
+      </if>
+      <if test="fee != null" >
+        fee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="billmonth != null" >
+        #{billmonth,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="totalSize != null" >
+        #{totalSize,jdbcType=INTEGER},
+      </if>
+      <if test="detailsId != null" >
+        #{detailsId,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="peerNumber != null" >
+        #{peerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="locationType != null" >
+        #{locationType,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="dialType != null" >
+        #{dialType,jdbcType=VARCHAR},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.AccountCall" >
+    update account_call
+    <set >
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="billmonth != null" >
+        billMonth = #{billmonth,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="totalSize != null" >
+        total_size = #{totalSize,jdbcType=INTEGER},
+      </if>
+      <if test="detailsId != null" >
+        details_id = #{detailsId,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="peerNumber != null" >
+        peer_number = #{peerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="locationType != null" >
+        location_type = #{locationType,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="dialType != null" >
+        dial_type = #{dialType,jdbcType=VARCHAR},
+      </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.AccountCall" >
+    update account_call
+    set mobile = #{mobile,jdbcType=VARCHAR},
+      billMonth = #{billmonth,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      total_size = #{totalSize,jdbcType=INTEGER},
+      details_id = #{detailsId,jdbcType=VARCHAR},
+      time = #{time,jdbcType=VARCHAR},
+      peer_number = #{peerNumber,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      location_type = #{locationType,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=VARCHAR},
+      dial_type = #{dialType,jdbcType=VARCHAR},
+      fee = #{fee,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

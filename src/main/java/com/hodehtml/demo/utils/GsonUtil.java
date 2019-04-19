@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  * @author Wallis Wang
  * @version $Id: GsonUtil.java, v 0.1 2014年5月15日 下午5:41:20 wangqiang Exp $
  */
+@Component
 public class GsonUtil {
 
     private static Gson gson = null;

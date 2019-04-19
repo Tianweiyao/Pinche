@@ -45,7 +45,7 @@ public class BaseAction {
     protected String customerRealName = "";//前台用户真实姓名
     protected String sinaUId  ="";
 
-    protected HttpServletRequest request = null;
+    protected HttpServletRequest request;
     protected HttpServletResponse response = null;
 
     protected Object reqobject = null;

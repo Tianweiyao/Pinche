@@ -30,7 +30,7 @@ public class HttpUtil {
             // 设置参数
             StringEntity s = new StringEntity(json.toString());
             s.setContentEncoding("UTF-8");
-            s.setContentType("application/json");
+            s.setContentType("application/json;charset=utf-8");
             httpPost.setEntity(s);
             HttpResponse response = httpClient.execute(httpPost);
             if (response != null) {
