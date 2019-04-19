@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.google.gson.JsonObject;
 import com.hodehtml.demo.dao.UserDebitBankMapper;
 import com.hodehtml.demo.dao.UserInfoMapper;
-import com.hodehtml.demo.model.User;
-import com.hodehtml.demo.model.UserDebitBank;
-import com.hodehtml.demo.model.UserInfo;
+import com.hodehtml.demo.model.*;
+import com.hodehtml.demo.service.UserInformationService;
 import com.hodehtml.demo.utils.*;
+import com.hodehtml.demo.utils.List;
+import com.hodehtml.demo.vo.Calls;
 import com.hodehtml.demo.vo.EduException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
@@ -51,9 +53,13 @@ public class RePayController {
     @Autowired
     private LoginUtil loginUtil;
     @Autowired
+    private UserInformationService userInformationService;
+    @Autowired
     private UserDebitBankMapper userDebitBankMapper;
     @Autowired
     private UserInfoMapper userInfoMapper;
+    @Autowired
+    private YunYingShang yunYingShang;
 
     private final String ENCODEING = "UTF-8";
 
@@ -198,7 +204,7 @@ public class RePayController {
     /**
      * 富友发送短信请求
      *
-     * @param paramsMap
+     * @param
      * @return
      * @throws Exception
      */
@@ -278,7 +284,7 @@ public class RePayController {
     /**
      * 富友卡支付接口
      *
-     * @param paramsMap
+     * @param
      * @return
      * @throws EduException
      */
@@ -403,7 +409,7 @@ public class RePayController {
     /**
      * 富友银行卡绑定
      *
-     * @param paramsMap
+     * @param
      * @return
      * @throws EduException
      */
@@ -482,6 +488,89 @@ public class RePayController {
             }
         }
         return resultMap;
+    }
+
+
+    //运营商h5页面
+    public Map<String,Object> H5Page() throws EduException{
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            String optType = "AUTH";
+            UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+            String idCard = userInfo.getCardNo();
+            String realName = userInfo.getUserName();
+            String callBackUrl = "";
+            map1.put("optType",optType);
+            map1.put("idCard",idCard);
+            map1.put("realName",realName);
+            map1.put("callBackUrl",callBackUrl);
+            Map<String, Object> map5 = yunYingShang.Send(map1);
+            String message = map5.get("message").toString();//返回信息
+            String orderId = map5.get("orderId").toString();//订单id
+            Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
+            String authUrl = map3.get("authUrl").toString();
+            String tradeNo = map3.get("tradeNo").toString();
+            UserOrderNo userOrderNo = new UserOrderNo();
+            userOrderNo.setAuthUrl(authUrl);
+            userOrderNo.setOrderId(orderId);
+            userOrderNo.setTradeNo(tradeNo);
+            userOrderNo.setUserId(user.getUuid());
+            userInformationService.insertUserOrderNo(userOrderNo);
+        }
+        return map;
+    }
+
+    public void  selectOrder() throws EduException{
+        User user = loginUtil.verification();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        String optType = "QUERY_ZIP_MOBILE_BILL";
+        UserOrderNo userOrderNo = userInformationService.selectUserOrderNo(user.getUuid());
+        String tradeNo = userOrderNo.getTradeNo();
+        String mobile = user.getUser_mobile();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(new Date());
+        String month = date;
+        map1.put("optType",optType);
+        map1.put("tradeNo",tradeNo);
+        map1.put("mobile",mobile);
+        Map<String, Object> map5 = yunYingShang.Send(map1);
+        String message = map5.get("message").toString();//返回信息
+        String orderId = map5.get("orderId").toString();//订单id
+        Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
+        JSONObject jsonObject = JSONObject.fromObject(map3.get("bills").toString());
+        UserOrderBill userOrderBill = (UserOrderBill)JSONObject.toBean(jsonObject);
+        userInformationService.insertUserOrderBill(userOrderBill);
+    }
+
+    public Map<String,Object> accountCall()throws EduException{
+        User user = loginUtil.verification();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        String optType = "QUERY_ZIP_MOBILE_CALL";
+        UserOrderNo userOrderNo = userInformationService.selectUserOrderNo(user.getUuid());
+        String tradeNo = userOrderNo.getTradeNo();
+        String mobile = user.getUser_mobile();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(new Date());
+        String month = date;
+        map1.put("optType",optType);
+        map1.put("tradeNo",tradeNo);
+        map1.put("mobile",mobile);
+        Map<String, Object> map5 = yunYingShang.Send(map1);
+        String message = map5.get("message").toString();//返回信息
+        String orderId = map5.get("orderId").toString();//订单id
+        Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
+        JSONObject jsonObject = JSONObject.fromObject(map3.get("list.calls").toString());
+        JSONObject jsonObject1 = JSONObject.fromObject(map3.get("list.calls").toString());
+        Calls calls = (Calls)JSONObject.toBean(jsonObject);
+        List list = (List)JSONObject.toBean(jsonObject1);
+
+
+
     }
 
 

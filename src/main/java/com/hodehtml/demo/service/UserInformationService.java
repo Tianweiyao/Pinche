@@ -46,4 +46,10 @@ public interface UserInformationService {
     void insertUserContacts(UserContacts record);
 
     void updateByPrimaryKey(UserInfo record);
+
+    void insertUserOrderNo(UserOrderNo record);
+
+    UserOrderNo selectUserOrderNo(String userId);
+
+    void insertUserOrderBill(UserOrderBill record);
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hodehtml.demo.dao.UserOrderNoMapper" >
+  <resultMap id="BaseResultMap" type="com.hodehtml.demo.model.UserOrderNo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="auth_url" property="authUrl" jdbcType="VARCHAR" />
+    <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, order_id, auth_url, trade_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_order_no
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_order_no
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hodehtml.demo.model.UserOrderNo" >
+    insert into user_order_no (id, user_id, order_id, 
+      auth_url, trade_no)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{authUrl,jdbcType=VARCHAR}, #{tradeNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserOrderNo" >
+    insert into user_order_no
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="authUrl != null" >
+        auth_url,
+      </if>
+      <if test="tradeNo != null" >
+        trade_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="authUrl != null" >
+        #{authUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hodehtml.demo.model.UserOrderNo" >
+    update user_order_no
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="authUrl != null" >
+        auth_url = #{authUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hodehtml.demo.model.UserOrderNo" >
+    update user_order_no
+    set user_id = #{userId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      auth_url = #{authUrl,jdbcType=VARCHAR},
+      trade_no = #{tradeNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

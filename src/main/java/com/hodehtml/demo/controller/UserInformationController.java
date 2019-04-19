@@ -17,6 +17,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -164,8 +166,8 @@ public class UserInformationController {
 
     @ApiOperation("")
     @ResponseBody
-    @RequestMapping(value = "/insertReptile", method = RequestMethod.POST)
-    public Map<String, Object> insertReptile(@RequestBody Reptile reptile) {
+    @RequestMapping(value = "/insertReptile", method = RequestMethod.POST,consumes = "application/json")
+    public Map<String, Object> insertReptile(@RequestBody Reptile reptile, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
@@ -190,6 +192,7 @@ public class UserInformationController {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
+            userJob.setUserId(user.getUuid());
             userInformationService.insertUserJob(userJob);
             map.put("message", "success");
             map.put("code", Code.successCode);
@@ -389,6 +392,7 @@ public class UserInformationController {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
+            userMarriage.setUserId(user.getUuid());
             userInformationService.insertUserMarriage(userMarriage);
             map.put("message", "success");
             map.put("code", Code.successCode);
@@ -424,6 +428,7 @@ public class UserInformationController {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
+            userLoan.setUserId(user.getUuid());
             userInformationService.insertUserLoan(userLoan);
             map.put("message", "success");
             map.put("code", Code.successCode);
@@ -442,6 +447,7 @@ public class UserInformationController {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
+            userLoan.setUserId(user.getUuid());
             userInformationService.updateByPrimaryKey(userLoan);
             map.put("message", "success");
             map.put("code", Code.successCode);
@@ -469,20 +475,39 @@ public class UserInformationController {
 
     @ApiOperation("插入基础信息")
     @ResponseBody
-    @RequestMapping(value = "/insertUserBace", method = RequestMethod.POST)
-    public Map<String,Object> insertUserBace(UserBace userBace){
+    @RequestMapping(value = "/insertUserBace", method = RequestMethod.POST,consumes = "application/json")
+    public Map<String,Object> insertUserBace(@RequestBody UserBace userBace){
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
+            userBace.setUserId(user.getUuid());
            userInformationService.insertUserBace(userBace);
             map.put("message", "success");
             map.put("code", Code.successCode);
         }
         return map;
     }
+
+    @ApiOperation("插入基础信息")
+    @ResponseBody
+    @RequestMapping(value = "/callBack", method = RequestMethod.GET,consumes = "application/json")
+    public Map<String,Object> callBack(@RequestParam("json") String json){
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = loginUtil.verification();
+        if (user == null) {
+            map.put("message", "请重新登陆");
+            map.put("code", Code.reLoginCode);
+        } else {
+            map.put("url", "json");
+            map.put("message", "success");
+            map.put("code", Code.successCode);
+        }
+        return map;
+    }
+
 
 
     /**

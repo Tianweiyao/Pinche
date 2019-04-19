@@ -38,6 +38,10 @@ public class UserInformationServiceImpl implements UserInformationService {
     private UserBaceMapper userBaceMapper;
     @Autowired
     private UserContactsMapper userContactsMapper;
+    @Autowired
+    private UserOrderNoMapper userOrderNoMapper;
+    @Autowired
+    private UserOrderBillMapper userOrderBillMapper;
 
     @Override
     public void insertFaceRecognition(FaceRecognition faceRecognition) {
@@ -120,53 +124,71 @@ public class UserInformationServiceImpl implements UserInformationService {
     public void updateByPrimaryKeySelective(UserInfo record){
 
         userInfoMapper.updateByPrimaryKeySelective(record);
-    };
+    }
 
     @Override
     public UserBace selectUserBace(String userId){
 
       UserBace userBace = userBaceMapper.selectByPrimaryKey(userId);
       return userBace;
-    };
+    }
 
     @Override
     public void insertUserBace(UserBace userBace){
 
         userBaceMapper.insert(userBace);
-    };
+    }
 
     @Override
     public UserJob selectByPrimaryKey(String UserId){
 
      UserJob userJob = userJobMapper.selectByPrimaryKey(UserId);
      return userJob;
-    };
+    }
 
     @Override
     public UserMarriage selectUserMarriage(String UserId){
 
        UserMarriage userMarriage = userMarriageMapper.selectByPrimaryKey(UserId);
        return userMarriage;
-    };
+    }
 
     @Override
     public UserContacts selectUserContacts( String UserId){
 
       UserContacts userContacts = userContactsMapper.selectByPrimaryKey(UserId);
       return userContacts;
-    };
+    }
 
     @Override
     public void insertUserContacts(UserContacts record){
 
         userContactsMapper.insert(record);
-    };
+    }
 
     @Override
     public void updateByPrimaryKey(UserInfo record){
 
         userInfoMapper.updateByPrimaryKey(record);
-    };
+    }
 
+    @Override
+    public void insertUserOrderNo(UserOrderNo record){
+
+        userOrderNoMapper.insert(record);
+    }
+
+    @Override
+    public UserOrderNo selectUserOrderNo(String userId){
+
+        UserOrderNo userOrderNo = userOrderNoMapper.selectByPrimaryKey(userId);
+        return userOrderNo;
+    }
+
+    @Override
+    public void insertUserOrderBill(UserOrderBill record){
+
+        userOrderBillMapper.insert(record);
+    };
 
 }
