@@ -1,17 +1,20 @@
 package com.hodehtml.demo.dao;
 
 import com.hodehtml.demo.model.AccountCall;
+import org.springframework.stereotype.Repository;
 
+@Repository("AccountCallMapper")
 public interface AccountCallMapper {
-    int deleteByPrimaryKey(Integer id);
 
-    int insert(AccountCall record);
+    void deleteByPrimaryKey(Integer id);
 
-    int insertSelective(AccountCall record);
+    void insert(AccountCall record);
+
+    void insertSelective(AccountCall record);
 
     AccountCall selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(AccountCall record);
+    void updateByPrimaryKeySelective(AccountCall record);
 
-    int updateByPrimaryKey(AccountCall record);
+    void updateByPrimaryKey(AccountCall record);
 }

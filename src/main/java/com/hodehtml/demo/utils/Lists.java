@@ -1,5 +1,5 @@
 package com.hodehtml.demo.utils;/**
- * created by pht on 2019/4/19 0019
+ * created by pht on 2019/4/22 0022
  */
 
 import io.swagger.annotations.ApiModel;
@@ -8,19 +8,17 @@ import lombok.ToString;
 
 /**
  * @program demo
- * @date 2019/4/19 0019
+ * @date 2019/4/22 0022
  * @author pht
  */
 @Data
 @ToString
 @ApiModel
-public class List {
+public class Lists {
 
-  private String billMonth;
-  private String code;
-  private String message;
-  private int total_size;
-
-
+    private String billMonth;
+    private String code;
+    private String message;
+    private int total_size;
 
 }
