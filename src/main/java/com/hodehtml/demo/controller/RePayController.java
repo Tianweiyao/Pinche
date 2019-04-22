@@ -3,6 +3,7 @@ package com.hodehtml.demo.controller;/**
  */
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -32,6 +33,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author pht
@@ -85,65 +90,55 @@ public class RePayController {
     }
 
 
-    @ApiOperation("代付")
-    @RequestMapping(value = "/pay", method = RequestMethod.GET)
-    @ResponseBody
-    public void Pay(@RequestParam("count") Integer count, @RequestParam("id") Integer userDebitId, @RequestParam("mobile") String
-            mobile1) {
+    public void Pay(User user, Integer count, Integer userDebitId, String mobile1) {
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = loginUtil.verification();
-        if (user == null) {
-            map.put("message", "请重新登陆");
-            map.put("code", Code.reLoginCode);
-        } else {
-            UserDebitBank userDebitBank = userDebitBankMapper.selectByPrimaryKey(userDebitId);
-            UserInfo userInfo = userInfoMapper.selectByUserId(user.getUuid());
-            String ver = "1.0";
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-            String date = format.format(new Date());
-            String merdt = date;
-            String orderno = UUID.randomUUID().toString().replace("-", "");
-            int bankno = userDebitBank.getBankId();
-            String accntno = userDebitBank.getDebitAccount();
-            String accntnm = userDebitBank.getDebitName();
-            int amt = count;
-            String entseq = "";
-            String memo = "";
-            String mobile = mobile1;
-            String certtp = "";
-            String certno = userInfo.getCardNo();
-            try {
-                String xml = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" +
-                        "<payforreq>" +
-                        "<ver>1.00</ver>" +
-                        "<merdt>" + merdt + "</merdt>" +
-                        "<orderno>" + System.currentTimeMillis() + "</orderno>" +
-                        "<bankno>" + bankno + "</bankno>" +
-                        "<cityno>2900</cityno>" +
-                        //"<branchnm>中国银行股份有限公司北京西单支行</branchnm>"+
-                        "<accntno>" + accntno + "</accntno>" +
-                        "<accntnm>" + accntnm + "</accntnm>" +
-                        "<amt>" + amt + "</amt>" +
-                        "<entseq>" + entseq + "</entseq>"
-                        + "<memo>" + memo + "</memo>"
-                        + "<mobile>" + mobile + "</mobile>"
-                        + "<certtp>0</certtp>"
-                        + "<certno>" + certno + "</certno>"
-                        + "</incomeforreq>";
-                String macSource = "0002900F0345178|123456|" + "payforreq" + "|" + xml;
-                String mac = MD5.md5(macSource, "UTF-8").toUpperCase();
-                String loginUrl = "https://fht-test.fuiou.com/fuMer/req.do";
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("merid", "0002900F0345178"));
-                params.add(new BasicNameValuePair("reqtype", "payforreq"));
-                params.add(new BasicNameValuePair("xml", xml));
-                params.add(new BasicNameValuePair("mac", mac));
-                this.requestPost(loginUrl, params);
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        UserDebitBank userDebitBank = userDebitBankMapper.selectByPrimaryKey(userDebitId);
+        UserInfo userInfo = userInfoMapper.selectByUserId(user.getUuid());
+        String ver = "1.0";
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String date = format.format(new Date());
+        String merdt = date;
+        String orderno = UUID.randomUUID().toString().replace("-", "");
+        int bankno = userDebitBank.getBankId();
+        String accntno = userDebitBank.getDebitAccount();
+        String accntnm = userDebitBank.getDebitName();
+        int amt = count;
+        String entseq = "0003330F2263768"; //企业流水号
+        String memo = "";   //备注
+        String mobile = mobile1;
+        String certtp = ""; //证件类型
+        String certno = userInfo.getCardNo();
+        try {
+            String xml = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" +
+                    "<payforreq>" +
+                    "<ver>1.00</ver>" +
+                    "<merdt>" + merdt + "</merdt>" +
+                    "<orderno>" + System.currentTimeMillis() + "</orderno>" +
+                    "<bankno>" + bankno + "</bankno>" +
+                    "<cityno>2900</cityno>" +
+                    //"<branchnm>中国银行股份有限公司北京西单支行</branchnm>"+
+                    "<accntno>" + accntno + "</accntno>" +
+                    "<accntnm>" + accntnm + "</accntnm>" +
+                    "<amt>" + amt + "</amt>" +
+                    "<entseq>" + entseq + "</entseq>"
+                    + "<memo>" + memo + "</memo>"
+                    + "<mobile>" + mobile + "</mobile>"
+                    + "<certtp>0</certtp>"
+                    + "<certno>" + certno + "</certno>"
+                    + "</incomeforreq>";
+            String macSource = "0003330F2263768|ke9zloqugmrjztffgndq8mf91nwgsu2s|" + "payforreq" + "|" + xml;
+            String mac = MD5.md5(macSource, "UTF-8").toUpperCase();
+            String loginUrl = "https://fht-test.fuioupay.com/fuMer/req.do";
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("merid", "0002900F0345178"));
+            params.add(new BasicNameValuePair("reqtype", "payforreq"));
+            params.add(new BasicNameValuePair("xml", xml));
+            params.add(new BasicNameValuePair("mac", mac));
+            this.requestPost(loginUrl, params);
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -496,37 +491,64 @@ public class RePayController {
 
 
     //运营商h5授权
-    public Map<String,Object> H5Page() throws EduException{
+    @ApiOperation("运营商")
+    @ResponseBody
+    @RequestMapping("/H5Page")
+    public Map<String,Object> H5Page(HttpServletResponse response) throws EduException{
         Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Object> map1 = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
-            String optType = "AUTH";
-            UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
-            String idCard = userInfo.getCardNo();
-            String realName = userInfo.getUserName();
-            String callBackUrl = "http://122.235.202.133:8080/UserInformation/kJTAccreditReturnUrl";
-            map1.put("optType",optType);
-            map1.put("idCard",idCard);
-            map1.put("realName",realName);
-            map1.put("callBackUrl",callBackUrl);
-            Map<String, Object> map5 = yunYingShang.Send(map1);
-            String message = map5.get("message").toString();//返回信息
-            String orderId = map5.get("orderId").toString();//订单id
-            Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
-            String authUrl = map3.get("authUrl").toString();
-            String tradeNo = map3.get("tradeNo").toString();
-            UserOrderNo userOrderNo = new UserOrderNo();
-            userOrderNo.setAuthUrl(authUrl);
-            userOrderNo.setOrderId(orderId);
-            userOrderNo.setTradeNo(tradeNo);
-            userOrderNo.setUserId(user.getUuid());
-            userInformationService.insertUserOrderNo(userOrderNo);
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            if (user == null) {
+                map.put("message", "请重新登陆");
+                map.put("code", Code.reLoginCode);
+            } else {
+                String optType = "AUTH";
+                UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+                String idCard = userInfo.getCardNo();
+                String realName = userInfo.getUserName();
+                String callBackUrl = "http://122.235.202.133:8080/UserInformation/kJTAccreditReturnUrl";
+                map1.put("optType", optType);
+                map1.put("idCard", idCard);
+                map1.put("realName", realName);
+                map1.put("callBackUrl", callBackUrl);
+                Map<String, Object> map5 = yunYingShang.Send(map1);
+                String message = map5.get("message").toString();//返回信息
+                String orderId = map5.get("orderId").toString();//订单id
+                Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
+                String authUrl = map3.get("authUrl").toString();
+                String tradeNo = map3.get("tradeNo").toString();
+                UserOrderNo userOrderNo = new UserOrderNo();
+                userOrderNo.setAuthUrl(authUrl);
+                userOrderNo.setOrderId(orderId);
+                userOrderNo.setTradeNo(tradeNo);
+                userOrderNo.setUserId(user.getUuid());
+                userInformationService.insertUserOrderNo(userOrderNo);
+                this.kJTAccreditReturnUrl(authUrl, response);
+            }
         }
         return map;
+    }
+
+    public void kJTAccreditReturnUrl(String callBackUrl, HttpServletResponse response) {
+        try {
+            StringBuffer html = new StringBuffer();
+            html.append("<form id=\"wechatPay\" name=\"wechatPay\" action=\"" + callBackUrl + "\" method=\"get\">");
+            html.append("<input type=\"submit\" value=\"submit\" style=\"display:none;\"></form>");
+            html.append("<script>document.forms['wechatPay'].submit();</script>");
+            Document doc = Jsoup.parse(new String(html));
+            System.out.println(doc.outerHtml());
+            response.setContentType("text/html;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.println(doc.outerHtml());
+//            return dealSuccess(resultMap);
+        } catch (Exception e) {
+//            return dealException(e);
+            System.err.println(e.toString());
+        }
     }
 
     /**

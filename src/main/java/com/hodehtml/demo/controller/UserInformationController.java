@@ -92,17 +92,17 @@ public class UserInformationController {
     @ApiOperation("申请提额")
     @ResponseBody
     @RequestMapping(value = "/ApplicationRaise", method = RequestMethod.POST)
-    public Map<String, Object> ApplicationRaise(){
+    public Map<String, Object> ApplicationRaise() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
-           UserInfo userInfo = new UserInfo();
-           userInfo.setUserId(user.getUuid());
-           userInfo.setRealPeriods((short)1);
-           userInfo.setAuthStatus((byte)1);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(user.getUuid());
+            userInfo.setRealPeriods((short) 1);
+            userInfo.setAuthStatus((byte) 1);
             userInformationService.updateByPrimaryKeySelective(userInfo);
             map.put("message", "success");
             map.put("code", Code.successCode);
@@ -173,7 +173,7 @@ public class UserInformationController {
 
     @ApiOperation("")
     @ResponseBody
-    @RequestMapping(value = "/insertReptile", method = RequestMethod.POST,consumes = "application/json")
+    @RequestMapping(value = "/insertReptile", method = RequestMethod.POST, consumes = "application/json")
     public Map<String, Object> insertReptile(@RequestBody Reptile reptile, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
@@ -256,8 +256,8 @@ public class UserInformationController {
             String[] directlyUnder = contactsVo.getDirectlyUnder();
             String[] friend = contactsVo.getFriend();
             String[] colleague = contactsVo.getColleague();
-            if(directlyUnder.length>0 && directlyUnder != null){
-                for (int i=0;i<directlyUnder.length;i++){
+            if (directlyUnder.length > 0 && directlyUnder != null) {
+                for (int i = 0; i < directlyUnder.length; i++) {
                     UserContacts userContacts = new UserContacts();
                     userContacts.setContactsMobile(directlyUnder[1]);
                     userContacts.setContactsName(directlyUnder[0]);
@@ -266,8 +266,8 @@ public class UserInformationController {
                     userInformationService.insertUserContacts(userContacts);
                 }
             }
-            if(friend.length>0 && friend != null){
-                for (int i=0;i<friend.length;i++){
+            if (friend.length > 0 && friend != null) {
+                for (int i = 0; i < friend.length; i++) {
                     UserContacts userContacts = new UserContacts();
                     userContacts.setContactsMobile(friend[1]);
                     userContacts.setContactsName(friend[0]);
@@ -276,8 +276,8 @@ public class UserInformationController {
                     userInformationService.insertUserContacts(userContacts);
                 }
             }
-            if(colleague.length>0 && colleague != null){
-                for (int i=0;i<colleague.length;i++){
+            if (colleague.length > 0 && colleague != null) {
+                for (int i = 0; i < colleague.length; i++) {
                     UserContacts userContacts = new UserContacts();
                     userContacts.setContactsMobile(colleague[1]);
                     userContacts.setContactsName(colleague[0]);
@@ -305,7 +305,7 @@ public class UserInformationController {
         } else {
             UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
             UserInfoVo userInfoVo = new UserInfoVo();
-            if(userInfo != null){
+            if (userInfo != null) {
                 userInfoVo.setUserEmail(userInfo.getUserEmail());
                 userInfoVo.setUserWeiXin(userInfo.getUserWeiXin());
             }
@@ -339,11 +339,10 @@ public class UserInformationController {
     }
 
 
-
     @ApiOperation("查询个人信息")
     @ResponseBody
     @RequestMapping(value = "/selectInforMation", method = RequestMethod.POST)
-    public Map<String,Object> selectInforMation(){
+    public Map<String, Object> selectInforMation() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
@@ -351,37 +350,37 @@ public class UserInformationController {
             map.put("code", Code.reLoginCode);
         } else {
             UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
-            if(userInfo.getPeriods() == 0){
-                userInfo.setPeriods((short)1500);
+            if (userInfo.getPeriods() == 0) {
+                userInfo.setPeriods((short) 1500);
             }
-            if(userInfo.getPeriods() == 1){
-                userInfo.setPeriods((short)3000);
+            if (userInfo.getPeriods() == 1) {
+                userInfo.setPeriods((short) 3000);
             }
-            if(userInfo.getPeriods() == 2){
-                userInfo.setPeriods((short)8000);
+            if (userInfo.getPeriods() == 2) {
+                userInfo.setPeriods((short) 8000);
             }
-            if(userInfo.getPeriods() == 3){
-                userInfo.setPeriods((short)10000);
+            if (userInfo.getPeriods() == 3) {
+                userInfo.setPeriods((short) 10000);
             }
-            if(userInfo.getPeriods() == 4){
-                userInfo.setPeriods((short)50000);
+            if (userInfo.getPeriods() == 4) {
+                userInfo.setPeriods((short) 50000);
             }
-            if(userInfo.getRealPeriods() == 0){
-                userInfo.setRealPeriods((short)1500);
+            if (userInfo.getRealPeriods() == 0) {
+                userInfo.setRealPeriods((short) 1500);
             }
-            if(userInfo.getRealPeriods() == 1){
-                userInfo.setRealPeriods((short)3000);
+            if (userInfo.getRealPeriods() == 1) {
+                userInfo.setRealPeriods((short) 3000);
             }
-            if(userInfo.getRealPeriods() == 2){
-                userInfo.setRealPeriods((short)8000);
+            if (userInfo.getRealPeriods() == 2) {
+                userInfo.setRealPeriods((short) 8000);
             }
-            if(userInfo.getRealPeriods() == 3){
-                userInfo.setRealPeriods((short)10000);
+            if (userInfo.getRealPeriods() == 3) {
+                userInfo.setRealPeriods((short) 10000);
             }
-            if(userInfo.getRealPeriods() == 4){
-                userInfo.setRealPeriods((short)50000);
+            if (userInfo.getRealPeriods() == 4) {
+                userInfo.setRealPeriods((short) 50000);
             }
-            map.put("userInfo",userInfo);
+            map.put("userInfo", userInfo);
             map.put("message", "success");
             map.put("code", Code.successCode);
         }
@@ -465,7 +464,7 @@ public class UserInformationController {
     @ApiOperation("查询基础信息")
     @ResponseBody
     @RequestMapping(value = "/selectUserBace", method = RequestMethod.POST)
-    public Map<String,Object> selectUserBace(){
+    public Map<String, Object> selectUserBace() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
@@ -482,8 +481,8 @@ public class UserInformationController {
 
     @ApiOperation("插入基础信息")
     @ResponseBody
-    @RequestMapping(value = "/insertUserBace", method = RequestMethod.POST,consumes = "application/json")
-    public Map<String,Object> insertUserBace(@RequestBody UserBace userBace){
+    @RequestMapping(value = "/insertUserBace", method = RequestMethod.POST, consumes = "application/json")
+    public Map<String, Object> insertUserBace(@RequestBody UserBace userBace) {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
@@ -491,7 +490,7 @@ public class UserInformationController {
             map.put("code", Code.reLoginCode);
         } else {
             userBace.setUserId(user.getUuid());
-           userInformationService.insertUserBace(userBace);
+            userInformationService.insertUserBace(userBace);
             map.put("message", "success");
             map.put("code", Code.successCode);
         }
@@ -500,8 +499,8 @@ public class UserInformationController {
 
     @ApiOperation("插入基础信息")
     @ResponseBody
-    @RequestMapping(value = "/callBack", method = RequestMethod.GET,consumes = "application/json")
-    public Map<String,Object> callBack(@RequestParam("json") String json){
+    @RequestMapping(value = "/callBack", method = RequestMethod.GET, consumes = "application/json")
+    public Map<String, Object> callBack(@RequestParam("json") String json) {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
@@ -535,7 +534,7 @@ public class UserInformationController {
                 for (int i = 0; i < list.size(); i++) {
                     if (list1 != null && list1.size() > 0) {
                         for (int k = 0; k < list1.size(); k++) {
-                            rePayController.Pay(list.get(i).getLoanMoney().precision(), list1.get(k).getUserDebitId(), user.getUser_mobile());
+                            rePayController.Pay(user, list.get(i).getLoanMoney().precision(), list1.get(k).getUserDebitId(), user.getUser_mobile());
                         }
                     }
                 }
@@ -550,39 +549,16 @@ public class UserInformationController {
     @ApiOperation("还款")
     @ResponseBody
     @RequestMapping(value = "/Repayment", method = RequestMethod.GET)
-    public Map<String, Object> Repayment(@RequestParam("count") int count,@RequestParam("id") Integer userDebitId) {
+    public Map<String, Object> Repayment(@RequestParam("count") int count, @RequestParam("id") Integer userDebitId) {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
-            rePayController.Pay(count,userDebitId, user.getUser_mobile());
+            rePayController.Pay(user, count, userDebitId, user.getUser_mobile());
         }
         return map;
     }
-
-
-    @RequestMapping("/kJTAccreditReturnUrl")
-    @ResponseBody
-    @ApiOperation("运营商回调url")
-    public void kJTAccreditReturnUrl(@RequestParam("callBackUrl") String callBackUrl, HttpServletResponse response) {
-        try {
-            StringBuffer html = new StringBuffer();
-            html.append("<form id=\"wechatPay\" name=\"wechatPay\" action=\"" + callBackUrl + "\" method=\"get\">");
-            html.append("<input type=\"submit\" value=\"submit\" style=\"display:none;\"></form>");
-            html.append("<script>document.forms['wechatPay'].submit();</script>");
-            Document doc = Jsoup.parse(new String(html));
-            System.out.println(doc.outerHtml());
-            response.setContentType("text/html;charset=utf-8");
-            PrintWriter out = response.getWriter();
-            out.println(doc.outerHtml());
-//            return dealSuccess(resultMap);
-        } catch (Exception e) {
-//            return dealException(e);
-            System.err.println(e.toString());
-        }
-    }
-
 
 }
