@@ -86,6 +86,13 @@
       #{signKey,jdbcType=VARCHAR}, #{signTime,jdbcType=INTEGER}, #{oldLoanTime,jdbcType=INTEGER}, 
       #{applyNo,jdbcType=VARCHAR})
   </insert>
+
+  <select id="selectUserLoan" resultMap="BaseResultMap">
+     SELECT
+       <include refid="Base_Column_List"/>
+    FROM user_loan where user_id = #{userId,jdbcType=VARCHAR} and repay_status = 0;
+  </select>
+
   <insert id="insertSelective" parameterType="com.hodehtml.demo.model.UserLoan" >
     insert into user_loan
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -1,6 +1,10 @@
 package com.hodehtml.demo.service;
 
+import com.hodehtml.demo.model.MessageCalls;
 import com.hodehtml.demo.model.User;
+import com.hodehtml.demo.model.UserLoan;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -16,6 +20,10 @@ public interface UserService {
     void iforgot(User user);
 
     User login(User user);
+
+    void insert(MessageCalls record);
+
+
 
 
 }

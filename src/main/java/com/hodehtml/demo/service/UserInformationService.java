@@ -52,4 +52,12 @@ public interface UserInformationService {
     UserOrderNo selectUserOrderNo(String userId);
 
     void insertUserOrderBill(UserOrderBill record);
+
+    void insertAccountCall(AccountCall record);
+
+    void insertFullOrder(FullOrder record);
+
+    List<UserLoan> selectUserLoan(String userId);
+
+    List<UserDebitBank> selectUserDebitBank(String userId);
 }

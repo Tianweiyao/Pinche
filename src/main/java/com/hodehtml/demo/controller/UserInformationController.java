@@ -9,7 +9,10 @@ import com.hodehtml.demo.utils.LoginUtil;
 import com.hodehtml.demo.vo.UserContactsVo;
 import com.hodehtml.demo.vo.UserInfoVo;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,6 +43,8 @@ public class UserInformationController {
     private LoginUtil loginUtil;
     @Autowired
     private UserInformationService userInformationService;
+    @Autowired
+    private RePayController rePayController;
 
     @ApiOperation("插入人脸识别信息")
     @ResponseBody
@@ -509,7 +516,6 @@ public class UserInformationController {
     }
 
 
-
     /**
      * 定时代扣 每天12点执行一次
      *
@@ -523,7 +529,17 @@ public class UserInformationController {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
-
+            List<UserLoan> list = userInformationService.selectUserLoan(user.getUuid());
+            List<UserDebitBank> list1 = userInformationService.selectUserDebitBank(user.getUuid());
+            if (list != null && list.size() > 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (list1 != null && list1.size() > 0) {
+                        for (int k = 0; k < list1.size(); k++) {
+                            rePayController.Pay(list.get(i).getLoanMoney().precision(), list1.get(k).getUserDebitId(), user.getUser_mobile());
+                        }
+                    }
+                }
+            }
         }
         return map;
     }
@@ -533,17 +549,39 @@ public class UserInformationController {
      */
     @ApiOperation("还款")
     @ResponseBody
-    @RequestMapping(value = "/Repayment", method = RequestMethod.POST)
-    public Map<String, Object> Repayment() {
+    @RequestMapping(value = "/Repayment", method = RequestMethod.GET)
+    public Map<String, Object> Repayment(@RequestParam("count") int count,@RequestParam("id") Integer userDebitId) {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = loginUtil.verification();
         if (user == null) {
             map.put("message", "请重新登陆");
             map.put("code", Code.reLoginCode);
         } else {
-
+            rePayController.Pay(count,userDebitId, user.getUser_mobile());
         }
         return map;
+    }
+
+
+    @RequestMapping("/kJTAccreditReturnUrl")
+    @ResponseBody
+    @ApiOperation("运营商回调url")
+    public void kJTAccreditReturnUrl(@RequestParam("callBackUrl") String callBackUrl, HttpServletResponse response) {
+        try {
+            StringBuffer html = new StringBuffer();
+            html.append("<form id=\"wechatPay\" name=\"wechatPay\" action=\"" + callBackUrl + "\" method=\"get\">");
+            html.append("<input type=\"submit\" value=\"submit\" style=\"display:none;\"></form>");
+            html.append("<script>document.forms['wechatPay'].submit();</script>");
+            Document doc = Jsoup.parse(new String(html));
+            System.out.println(doc.outerHtml());
+            response.setContentType("text/html;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.println(doc.outerHtml());
+//            return dealSuccess(resultMap);
+        } catch (Exception e) {
+//            return dealException(e);
+            System.err.println(e.toString());
+        }
     }
 
 

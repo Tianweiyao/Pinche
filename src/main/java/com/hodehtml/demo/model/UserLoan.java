@@ -6,6 +6,9 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ *
+ */
 @ApiModel
 @Data
 @ToString

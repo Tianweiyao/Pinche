@@ -5,16 +5,19 @@ package com.hodehtml.demo.controller;/**
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.hodehtml.demo.dao.UserDebitBankMapper;
 import com.hodehtml.demo.dao.UserInfoMapper;
 import com.hodehtml.demo.model.*;
 import com.hodehtml.demo.service.UserInformationService;
+import com.hodehtml.demo.service.UserService;
 import com.hodehtml.demo.utils.*;
-import com.hodehtml.demo.utils.List;
+import com.hodehtml.demo.vo.BasicinFocheckItems;
 import com.hodehtml.demo.vo.Calls;
 import com.hodehtml.demo.vo.EduException;
+import com.hodehtml.demo.vo.UserBasicInfoVo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import net.sf.json.JSONArray;
@@ -60,6 +63,8 @@ public class RePayController {
     private UserInfoMapper userInfoMapper;
     @Autowired
     private YunYingShang yunYingShang;
+    @Autowired
+    private UserService userService;
 
     private final String ENCODEING = "UTF-8";
 
@@ -133,7 +138,6 @@ public class RePayController {
                 params.add(new BasicNameValuePair("reqtype", "payforreq"));
                 params.add(new BasicNameValuePair("xml", xml));
                 params.add(new BasicNameValuePair("mac", mac));
-
                 this.requestPost(loginUrl, params);
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
@@ -491,7 +495,7 @@ public class RePayController {
     }
 
 
-    //运营商h5页面
+    //运营商h5授权
     public Map<String,Object> H5Page() throws EduException{
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> map1 = new HashMap<String, Object>();
@@ -504,7 +508,7 @@ public class RePayController {
             UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
             String idCard = userInfo.getCardNo();
             String realName = userInfo.getUserName();
-            String callBackUrl = "";
+            String callBackUrl = "http://122.235.202.133:8080/UserInformation/kJTAccreditReturnUrl";
             map1.put("optType",optType);
             map1.put("idCard",idCard);
             map1.put("realName",realName);
@@ -525,6 +529,10 @@ public class RePayController {
         return map;
     }
 
+    /**
+     * 获取账号账单
+     * @throws EduException
+     */
     public void  selectOrder() throws EduException{
         User user = loginUtil.verification();
         Map<String, Object> map1 = new HashMap<String, Object>();
@@ -547,9 +555,14 @@ public class RePayController {
         userInformationService.insertUserOrderBill(userOrderBill);
     }
 
+    /**
+     * 获取账号通话
+     * @throws EduException
+     */
     public Map<String,Object> accountCall()throws EduException{
         User user = loginUtil.verification();
         Map<String, Object> map1 = new HashMap<String, Object>();
+        Map<String,Object> map2 = new HashMap<>();
         String optType = "QUERY_ZIP_MOBILE_CALL";
         UserOrderNo userOrderNo = userInformationService.selectUserOrderNo(user.getUuid());
         String tradeNo = userOrderNo.getTradeNo();
@@ -565,12 +578,140 @@ public class RePayController {
         String orderId = map5.get("orderId").toString();//订单id
         Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
         JSONObject jsonObject = JSONObject.fromObject(map3.get("list.calls").toString());
-        JSONObject jsonObject1 = JSONObject.fromObject(map3.get("list.calls").toString());
+        JSONObject jsonObject1 = JSONObject.fromObject(map3.get("list").toString());
         Calls calls = (Calls)JSONObject.toBean(jsonObject);
-        List list = (List)JSONObject.toBean(jsonObject1);
+        Lists list = (Lists)JSONObject.toBean(jsonObject1);
+        AccountCall accountCall = new AccountCall();
+        accountCall.setBillmonth(list.getBillMonth());
+        accountCall.setCode(list.getCode());
+        accountCall.setDetailsId(calls.getDetails_id());
+        accountCall.setMessage(list.getMessage());
+        accountCall.setDialType(calls.getDial_type());
+        accountCall.setDuration(calls.getDuration());
+        accountCall.setFee(calls.getFree());
+        accountCall.setLocation(calls.getLocation());
+        accountCall.setLocationType(calls.getLocation_type());
+        accountCall.setMobile(map3.get("mobile").toString());
+        accountCall.setPeerNumber(calls.getPeer_number());
+        accountCall.setTime(calls.getTime());
+        accountCall.setTotalSize(list.getTotal_size());
+        userInformationService.insertAccountCall(accountCall);
+        map2.put("message","success");
+        map2.put("Code",Code.successCode);
+        return map2;
+    }
 
+    /**
+     * 获取短信通话
+     * @throws EduException
+     */
+    public Map<String,Object> messageCall() throws EduException{
+        User user = loginUtil.verification();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        Map<String,Object> map2 = new HashMap<>();
+        String optType = "QUERY_ZIP_MOBILE_SMS";
+        UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+        UserOrderNo userOrderNo = userInformationService.selectUserOrderNo(user.getUuid());
+        String idCard = userInfo.getCardNo();
+        String realName = userInfo.getUserName();
+        String callBackUrl = "";
+        map1.put("optType",optType);
+        map1.put("idCard",idCard);
+        map1.put("realName",realName);
+        map1.put("callBackUrl",callBackUrl);
+        Map<String, Object> map5 = yunYingShang.Send(map1);
+        String message = map5.get("message").toString();//返回信息
+        String orderId = map5.get("orderId").toString();//订单id
+        Map<String, Object> map3 = GsonUtil.fronJson2Map(message);
+        JSONObject jsonObject1 = JSONObject.fromObject(map3.get("list").toString());
+        MessageCallVo messageCallVo = (MessageCallVo)JSONObject.toBean(jsonObject1);
+        JSONObject jsonObject2 = JSONObject.fromObject(messageCallVo.getRecords());
+        MessageCalls messageCall = (MessageCalls)JSONObject.toBean(jsonObject2);
+        messageCall.setBillmonth(messageCallVo.getBillMonth());
+        messageCall.setCode(messageCallVo.getCode());
+        messageCall.setMessage(messageCallVo.getMessage());
+        messageCall.setTotalsize(messageCallVo.getTotalsize());
+        userService.insert(messageCall);
+        map2.put("message","success");
+        map2.put("Code",Code.successCode);
+        return map2;
+    }
 
+    public Map<String,Object> OperatorReport() throws EduException{
+        User user = loginUtil.verification();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        Map<String,Object> map2 = new HashMap<>();
+        String optType = "QUERY_ZIP_REPORT";
+        UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+        UserOrderNo userOrderNo = userInformationService.selectUserOrderNo(user.getUuid());
+        String tradeNo = userOrderNo.getTradeNo();
+        String mobile = user.getUser_mobile();
+        String idCard = userInfo.getCardNo();
+        String realName = userInfo.getUserName();
+        map1.put("optType",optType);
+        map1.put("tradeNo",tradeNo);
+        map1.put("mobile",mobile);
+        map1.put("idCard",idCard);
+        map1.put("realName",realName);
+        Map<String, Object> map5 = yunYingShang.Send(map1);
+        String code = map5.get("code").toString();
+        String message = map5.get("message").toString();
+        String update_time = map5.get("update_time").toString();
+        JSONObject jsonObject1 = JSONObject.fromObject(map5.get("userbasicinfo").toString());
+        UserBasicInfoVo userBasicInfoVo = (UserBasicInfoVo)JSONObject.toBean(jsonObject1);
+        JSONObject jsonObject2 = JSONObject.fromObject(map5.get("basicinfocheck_items").toString());
+        BasicinFocheckItems basicinFocheckItems = (BasicinFocheckItems)JSONObject.toBean(jsonObject2);
+        map2.put("message","success");
+        map2.put("Code",Code.successCode);
+        return map2;
+    }
 
+    public Map<String,Object> FullOrder() throws EduException{
+        User user = loginUtil.verification();
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        Map<String,Object> map2 = new HashMap<>();
+        String optType = "QUERY_ZIP_MOBILE_MONTH";
+        UserInfo userInfo = userInformationService.selectByUserId(user.getUuid());
+        UserOrderNo userOrderNo = userInformationService.selectUserOrderNo(user.getUuid());
+        String tradeNo = userOrderNo.getTradeNo();
+        String mobile = user.getUser_mobile();
+        map1.put("optType",optType);
+        map1.put("tradeNo",tradeNo);
+        map1.put("mobile",mobile);
+        Map<String, Object> map5 = yunYingShang.Send(map1);
+        String mobile1 = map5.get("mobile").toString();
+        int code = Integer.parseInt(map5.get("code").toString());
+        String message = map5.get("message").toString();
+        String name = map5.get("name").toString();
+        String idcard = map5.get("idcard").toString();
+        String carrier = map5.get("carrier").toString();
+        String province = map5.get("province").toString();
+        String city = map5.get("city").toString();
+        String open_time = map5.get("open_time").toString();
+        String level = map5.get("level").toString();
+        String package_name = map5.get("package_name").toString();
+        int state = Integer.parseInt(map5.get("state").toString());
+        int available_balance = Integer.valueOf(map5.get("available_balance").toString());
+        String lastmodifytime = map5.get("lastmodifytime").toString();
+        FullOrder fullOrder = new FullOrder();
+        fullOrder.setAvailableBalance(available_balance);
+        fullOrder.setCarrier(carrier);
+        fullOrder.setCity(city);
+        fullOrder.setCode(code+"");
+        fullOrder.setIdcard(idcard);
+        fullOrder.setLastmodifytime(lastmodifytime);
+        fullOrder.setLevel(level);
+        fullOrder.setMessage(message);
+        fullOrder.setMobile(mobile);
+        fullOrder.setName(name);
+        fullOrder.setOpenTime(open_time);
+        fullOrder.setPackageName(package_name);
+        fullOrder.setProvince(province);
+        fullOrder.setState(state);
+        userInformationService.insertFullOrder(fullOrder);
+        map2.put("message","success");
+        map2.put("Code",Code.successCode);
+        return map2;
     }
 
 

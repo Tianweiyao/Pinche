@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author pht
  * @program demo
@@ -42,6 +44,10 @@ public class UserInformationServiceImpl implements UserInformationService {
     private UserOrderNoMapper userOrderNoMapper;
     @Autowired
     private UserOrderBillMapper userOrderBillMapper;
+    @Autowired
+    private AccountCallMapper accountCallMapper;
+    @Autowired
+    private FullOrderMapper fullOrderMapper;
 
     @Override
     public void insertFaceRecognition(FaceRecognition faceRecognition) {
@@ -116,79 +122,107 @@ public class UserInformationServiceImpl implements UserInformationService {
     @Override
     public UserInfo selectByUserId(String userId) {
 
-     UserInfo userInfo = userInfoMapper.selectByUserId(userId);
-     return userInfo;
+        UserInfo userInfo = userInfoMapper.selectByUserId(userId);
+        return userInfo;
     }
 
     @Override
-    public void updateByPrimaryKeySelective(UserInfo record){
+    public void updateByPrimaryKeySelective(UserInfo record) {
 
         userInfoMapper.updateByPrimaryKeySelective(record);
     }
 
     @Override
-    public UserBace selectUserBace(String userId){
+    public UserBace selectUserBace(String userId) {
 
-      UserBace userBace = userBaceMapper.selectByPrimaryKey(userId);
-      return userBace;
+        UserBace userBace = userBaceMapper.selectByPrimaryKey(userId);
+        return userBace;
     }
 
     @Override
-    public void insertUserBace(UserBace userBace){
+    public void insertUserBace(UserBace userBace) {
 
         userBaceMapper.insert(userBace);
     }
 
     @Override
-    public UserJob selectByPrimaryKey(String UserId){
+    public UserJob selectByPrimaryKey(String UserId) {
 
-     UserJob userJob = userJobMapper.selectByPrimaryKey(UserId);
-     return userJob;
+        UserJob userJob = userJobMapper.selectByPrimaryKey(UserId);
+        return userJob;
     }
 
     @Override
-    public UserMarriage selectUserMarriage(String UserId){
+    public UserMarriage selectUserMarriage(String UserId) {
 
-       UserMarriage userMarriage = userMarriageMapper.selectByPrimaryKey(UserId);
-       return userMarriage;
+        UserMarriage userMarriage = userMarriageMapper.selectByPrimaryKey(UserId);
+        return userMarriage;
     }
 
     @Override
-    public UserContacts selectUserContacts( String UserId){
+    public UserContacts selectUserContacts(String UserId) {
 
-      UserContacts userContacts = userContactsMapper.selectByPrimaryKey(UserId);
-      return userContacts;
+        UserContacts userContacts = userContactsMapper.selectByPrimaryKey(UserId);
+        return userContacts;
     }
 
     @Override
-    public void insertUserContacts(UserContacts record){
+    public void insertUserContacts(UserContacts record) {
 
         userContactsMapper.insert(record);
     }
 
     @Override
-    public void updateByPrimaryKey(UserInfo record){
+    public void updateByPrimaryKey(UserInfo record) {
 
         userInfoMapper.updateByPrimaryKey(record);
     }
 
     @Override
-    public void insertUserOrderNo(UserOrderNo record){
+    public void insertUserOrderNo(UserOrderNo record) {
 
         userOrderNoMapper.insert(record);
     }
 
     @Override
-    public UserOrderNo selectUserOrderNo(String userId){
+    public UserOrderNo selectUserOrderNo(String userId) {
 
         UserOrderNo userOrderNo = userOrderNoMapper.selectByPrimaryKey(userId);
         return userOrderNo;
     }
 
     @Override
-    public void insertUserOrderBill(UserOrderBill record){
+    public void insertUserOrderBill(UserOrderBill record) {
 
         userOrderBillMapper.insert(record);
-    };
+    }
+
+    @Override
+    public void insertAccountCall(AccountCall record) {
+
+
+        accountCallMapper.insert(record);
+    }
+
+    @Override
+    public void insertFullOrder(FullOrder record) {
+
+        fullOrderMapper.insert(record);
+    }
+
+    @Override
+    public List<UserLoan> selectUserLoan(String userId) {
+
+        List<UserLoan> list = userLoanMapper.selectUserLoan(userId);
+
+        return list;
+    }
+
+    @Override
+    public List<UserDebitBank> selectUserDebitBank(String userId){
+
+      List<UserDebitBank> list = userDebitBankMapper.selectByUserId(userId);
+      return list;
+    }
 
 }

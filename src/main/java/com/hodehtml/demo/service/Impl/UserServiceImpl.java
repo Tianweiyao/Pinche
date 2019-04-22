@@ -2,8 +2,11 @@ package com.hodehtml.demo.service.Impl;/**
  * created by pht on 2019/4/12 0012
  */
 
+import com.hodehtml.demo.dao.MessageCallsMapper;
 import com.hodehtml.demo.dao.UserDao;
+import com.hodehtml.demo.model.MessageCalls;
 import com.hodehtml.demo.model.User;
+import com.hodehtml.demo.model.UserLoan;
 import com.hodehtml.demo.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private MessageCallsMapper messageCallsMapper;
+
 
     @Override
     public Boolean userMobileExists(String user_mobile) {
@@ -56,5 +62,14 @@ public class UserServiceImpl implements UserService {
       User user1 = userDao.login(user);
       return user1;
     }
+
+
+    @Override
+    public void insert(MessageCalls record){
+
+        messageCallsMapper.insert(record);
+    }
+
+
 
 }
